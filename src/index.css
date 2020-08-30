@@ -13,7 +13,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-%%
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -28,6 +27,22 @@ code {
 
     width: 100%;
     height: 100%;
+}
+.svg-circle{
+  /* r: 19; */
+  fill: white;
+  stroke: black;
+  stroke-width: 2;
+}
+.svg-text{
+  stroke: black;
+  stroke-width: 1;
+  text-anchor: middle;
+  /* dy: .3em; */
+}
+.svg-line{
+  stroke: black;
+  stroke-width: 2px;
 }
 .node{
   position: relative;
