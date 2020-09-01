@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 // import App from './App';
-import * as serviceWorker from './serviceWorker';
+// import * as serviceWorker from './serviceWorker';
 
 function DrawLine(props){
   if(props.isDrawing){
@@ -13,33 +13,39 @@ function DrawLine(props){
 
 function NodeGroup(props){
   console.log('nodeGroup');
-  return(// onClick's this valid?
+  return(
     <g onClick={props.onClick}>
-    <circle cx={`${props.x}`} cy={`${props.y}`} r="19" className="svg-circle" />
-    <text x={`${props.x}`} y={`${props.y}`} dy=".3em" className="svg-text">{props.id}</text>
+    <circle id={props.id} cx={`${props.x}`} cy={`${props.y}`} r="19" className="svg-circle" />
+    <text id={props.id} x={`${props.x}`} y={`${props.y}`} dy=".3em" className="svg-text">{props.id}</text>
   </g>
   );
 }
+//by value or ref?
+const extendarr = (arr, nodenum) => {
+  while(arr.length<nodenum){
+    arr.push([]);
+  }
+  return arr;
+}
 class Board extends React.Component{
-  //window resizes conflicts with h and w?
-  // let h = Math.floor(window.innerHeight*8/10);
-  // let w = math.floor(window.innerWidth*6/10);
   constructor(props){
     super(props);
     this.state = {
-      node_position : new Map(),
+      node_list: [],
+      nodenum: 0,
       isDrawing : false,
+      id1: null,
       x1 : null,
       y1 : null,
+      id2: null,
       x2 : null,
       y2 : null,
     };
-    // this.
+
     this.handleBoardClick = this.handleBoardClick.bind(this);
     this.handleGroupClick = this.handleGroupClick.bind(this);
     this.draw = this.draw.bind(this);
     this.handleMouseMove = this.handleMouseMove.bind(this);
-
   }
   handleBoardClick(e){
     console.log('Board clicked; isDrawing:',this.state.isDrawing);
@@ -47,15 +53,13 @@ class Board extends React.Component{
       this.setState({ isDrawing: this.state.isDrawing^1 });
       return;
     }
-    let p= JSON.stringify([e.clientX,e.clientY]);
-    console.log(this.state.node_position)
-    if(this.state.node_position.has(p)){
-      console.log('node '+p+' exists');
-      return;
-    }
-    this.state.node_position.set(p, this.state.node_position.size);
+    const x=e.clientX;
+    const y=e.clientY;
+    const newnode=createNode(x,y,this.state.nodenum);
+    this.state.node_list.push(newnode);
     this.setState({
-      node_position: this.state.node_position,
+      node_list: this.state.node_list,
+      nodenum: this.state.nodenum+1,
     });
     // console.log('clicked at: ',e.clientX, e.clientY);
   }
@@ -63,8 +67,7 @@ class Board extends React.Component{
     this.setState({
       x2: x2,
       y2: y2,
-    });
-
+      });
   }
   handleMouseMove(e){
     if(!this.state.isDrawing)
@@ -74,56 +77,60 @@ class Board extends React.Component{
   handleGroupClick(e){
     e.stopPropagation();
     console.log('node clicked');
-    // this.state.isDrawing^=1;
+    console.log('event.target: ',e.target, 'id: ',e.target.id);
+    const isDrawing=this.state.isDrawing;
+    const id2=e.target.id;
+    //not sure how to perform this change
+    // let newAdj=this.state.adj.slice();
+    if(isDrawing){
+      extendarr(this.state.node_list[this.state.id1].adj);
+      extendarr(this.state.node_list[id2].adj);
+      console.log(this.state.node_list[this.state.id1].adj)
+      console.log(this.state.node_list[id2].adj)
+      this.state.node_list[this.state.id1].adj.push(id2);
+      this.state.node_list[id2].adj.push(this.state.id1);
+    }
     this.setState({
-      isDrawing: this.state.isDrawing^1,
+      isDrawing: isDrawing^1,
+      id1: e.target.id,
       x1: e.clientX,
       y1: e.clientY, 
+      // id2: e.target,
       x2: e.clientX,
-      y2: e.clientY, 
+      y2: e.clientY,
+      // adj: newAdj, 
     });
-    // setInterval(draw(e.clientX,e.clientY),100);
-    // e.preventDefault();
   }
   convertToArr(s){
     let tmp=s.split('');
     tmp.splice(tmp.length-1,1)
     tmp.splice(0,1);
     tmp=tmp.join('');
-    // console.log('tmp: ',tmp)
     tmp=tmp.split(',');
-    // console.log('tmp: ',tmp)
-    // console.log('x: ',tmp[0],' y: ',tmp[1]);
     return ([tmp[0],tmp[1]]);
   }
   render(){
-    console.log('render; isDrawing: ',this.state.isDrawing);
-    let nodes_svg=[];
-    for(let ele of this.state.node_position){
-      let p=this.convertToArr(ele[0]);
-      // console.log('p: ',p);
-      // console.log('rendered node at: left ',p[0],' top ',p[1]);
-      // const nodes_svgtyle={
-      //   position: "absolute",
-      //   left: `${p[0]-19}px`,
-      //   top: `${p[1]-19}px`,
-      // };
-      nodes_svg.push(
-        // <div className="node clearfix" key={`${nodes_svg.length}`} style={nodes_svgtyle}>{ele[1]}</div>
-        <NodeGroup key={`${nodes_svg.length}`} x={`${p[0]}`} y={`${p[1]}`} id={`${nodes_svg.length}`} onClick={this.handleGroupClick} /> 
-        // <g key={`${nodes_svg.length}`} onClick={this.handleGroupClick}>
-        //   <circle cx={`${p[0]}`} cy={`${p[1]}`} r="19" className="svg-circle" />
-        //   <text x={`${p[0]}`} y={`${p[1]}`} dy=".3em" className="svg-text">{nodes_svg.length}</text>
-        // </g>
-      );
-    }
+    // console.log('render; isDrawing: ',this.state.isDrawing);
     return(
 <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
   className="board" onClick={this.handleBoardClick} onMouseMove={this.handleMouseMove}>
     <DrawLine isDrawing={this.state.isDrawing} x1={this.state.x1} x2={this.state.x2} y1={this.state.y1} y2={this.state.y2}/>
-    {/* <NodeGroup x="500" y="500" id="20" onClick={this.handleGroupClick} /> */}
+      
+      {this.state.node_list.map((node) =>{
+        const {x,y,id,adj} = node;
+        return(
+          <NodeGroup 
+          key={id}
+          x={x}
+          y={y}
+          id={id}
+          onClick={this.handleGroupClick}
+          />
+        );
+      })}
+
+
     <line x1="50" y1="50" x2="200" y2="50" className="svg-line"/>
-     {nodes_svg}
      <g>
      <circle cx="50" cy="50" r="19" className="svg-circle"/>
      <text x="50" y="50" dy=".3em" className="svg-text">1</text>
@@ -146,4 +153,18 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+// serviceWorker.unregister();
+
+const createNode = (x,y,id) => {
+  return {
+    x,
+    y,
+    id,
+    // x: x,
+    // y: y,
+    // id: id,
+    // del: 0,
+    adj: [[]],
+  };
+};
+
