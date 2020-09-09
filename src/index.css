@@ -34,6 +34,11 @@ code {
   stroke: black;
   stroke-width: 2;
 }
+
+/* .svg-group:hover{
+  transform: scale(1.3);
+} */
+
 .svg-text{
   stroke: black;
   stroke-width: 1;
@@ -43,6 +48,9 @@ code {
 .svg-line{
   stroke: black;
   stroke-width: 2px;
+}
+.svg-line:hover{
+  stroke-width:3px;
 }
 .node{
   position: relative;
