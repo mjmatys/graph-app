@@ -1,3 +1,8 @@
+
+html,body{
+  height:100%;
+}
+
 body {
   /* background: #EEF0CC	; */
   background-color: #F5F5F5;
@@ -17,8 +22,75 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+input[type=submit]{
+  background-color:#EAECCD;
+  border-radius: 5px;
+  width: 100px;
+  height:25px;
+  font-weight: bold;
+}
+.graph-textarea{
+  border-style: none;
+  padding:0;
+  width: 100%;
+  height:85%;
+  resize:none;
+  /* position:absolute; */
+  /* height:100px; */
+  /* display: block; */
+  background-color:whitesmoke;
+}
+.graph-textarea:focus{
+  outline:none;
+  /* background-color: #E4F4F5;  */
+  /* background-color: #ECEDD7;  */
+}
+
+.datasubmit{
+  vertical-align: bottom;
+  /* position: absolute; */
+  /* width: 50px; */
+  /* display: block; */
+  /* bottom: 0; */
+  /* margin-left:auto;
+  margin-right: auto;
+  align-items: center; */
+  /* margin:auto; */
+}
+
+
+
+label{
+  display: block;
+  text-align:center;
+}
+.container{
+  /* position: fixed; */
+  /* width: 100%; */
+  height:100%;
+  /* fill: black; */
+}
+.graph-representation{
+  position: fixed;
+  top: 25%;
+  left: 2%;
+  /* top:100px;
+  left: 100px; */
+
+  padding: 5px;
+
+  height: 30%;
+  width: 15%;
+
+  border-radius: 25px;
+  border-style: solid;
+  border-color:#a3a1a1;
+
+  background-color: whitesmoke;
+  /* border-width: 5px; */
+}
 .board {
-    position: fixed;
+    /* position: fixed; */
     padding: 0;
     margin: 0;
 

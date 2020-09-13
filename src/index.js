@@ -1,5 +1,5 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, {useState} from 'react';
+import ReactDOM, { render } from 'react-dom';
 import './index.css';
 // import App from './App';
 // import * as serviceWorker from './serviceWorker';
@@ -16,8 +16,92 @@ const er=4*r;
 const dt=0.01;
 // const dt=0.0008;
 //add to state, change on resize
-let mx=window.innerWidth/2;
-let my=window.innerHeight/2;
+// let mx=window.innerWidth/2;
+// let my=window.innerHeight/2;
+
+const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9'
+
+// '10 15
+// 0 1
+// 0 4
+// 0 5
+// 1 6
+// 1 2
+// 2 3
+// 2 7
+// 3 8
+// 3 4
+// 4 9
+// 5 8
+// 5 7
+// 6 8
+// 6 9
+// 7 9'
+const createNode = (x,y,id,key) => {
+  return {
+    x,
+    y,
+    id,
+    // x: x,
+    // y: y,
+    // id: id,
+    // del: 0,
+    adj: [],
+    key,
+  };
+};
+const getdist = (x1, y1, x2, y2) => Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y1-y2,2));
+
+const getkey = (u,v) => u.toString().concat('->',v.toString());
+
+const getnextid = (nodelist) => {
+  let nullid=-1;
+  for(let i=0;i<nodelist.length;i++){
+    if(nodelist[i]==null){
+      nullid=i;
+      break;
+    }
+  }
+  return nullid===-1?nodelist.length:nullid;
+}
+
+
+const createNodelist = (n,nodelist) => {
+  let id = 0;
+  while(nodelist.length<n){
+    const [x,y] = GetRandCords();
+    nodelist.push(createNode(x,y,id,id++));
+  }
+}
+
+const renderGraph = (value) => {
+  console.log(' the  dupa '.split(/[ ]+/));
+  const arr = value.split(/[\n]+/);
+  const key = 0;
+  console.log(arr);
+  const [n,e] = arr[0].split(/[ ]+/);
+  if(isNaN(n) || isNaN(e)){
+    window.alert('input format not accepted')
+    return;
+  }
+  let nodelist = [];
+  createNodelist(n, nodelist);
+  for(let i=1;i<=e;i++){
+    //problem with split and isnan when whitespace is first
+    let pair = arr[i].split(/[ ]+/);
+    if(pair[0]=='')
+      pair.shift();
+    const [u,v] = pair;
+    if(isNaN(u) || isNaN(v)){
+      window.alert('input format not accepted')
+      return;
+    }
+    console.log('u: ',u,' v: ',v);
+    nodelist[u].adj.push(v);
+    nodelist[v].adj.push(u);
+  }
+  return nodelist;
+}
 
 function DrawLine(props){
   if(props.isDrawing){
@@ -36,12 +120,52 @@ function NodeGroup(props){
   );
 }
 
+const GetRandCords = () => {
+  const [mx,my] = [window.innerWidth,window.innerHeight]
+  const x = Math.random()*0.3*mx+0.4*mx;
+  const y = Math.random()*0.3*my+0.4*my;
+  return [x,y];
+}
+
+function GraphRepresentation(props){
+  const [value,setValue] = useState('');
+
+  const ToNodelist = (event) => {
+    event.preventDefault();
+    // const arr = value.split(/[ \n\t]+/);
+    console.log(value);
+    console.log(petersen);
+    const nodelist = renderGraph(value);
+    props.setNodelist(nodelist);
+
+    // console.log(value);
+  }
+  
+  return(
+    <div className="graph-representation">
+    <form onSubmit={ToNodelist} className="container" style={{textAlign: "center"}}>
+    <label style={{height: "93%"}}>
+    Adjacency List
+    <hr/>
+    {/* <input className="graph-data container" type="text" value={value} onChange={(e) => setValue(e.target.value)}/> */}
+    <textarea className="graph-textarea" value={value} onChange={(e) => setValue(e.target.value)}/>
+    </label>
+    <input type="submit" value="visualize" className="datasubmit"/>
+
+
+    </form>
+
+    </div>
+  );
+
+}
+
 class Board extends React.Component{
   constructor(props){
     super(props);
     this.state = {
       node_list: [],
-      nodenum: 0,
+      nodenum: 0, //used as node keys
       isDrawing : false,
       isMouseDown : false,
       id1: null,
@@ -54,6 +178,8 @@ class Board extends React.Component{
       y2 : null,
       intervalID: null,
       timer: 0,
+      mx: window.innerWidth/2,
+      my: window.innerHeight/2,
     };
 
     this.handleBoardClick = this.handleBoardClick.bind(this);
@@ -65,18 +191,35 @@ class Board extends React.Component{
     this.handleMouseUp = this.handleMouseUp.bind(this);
     this.move = this.move.bind(this);
     this.manageCollisions=this.manageCollisions.bind(this);
+    this.handleWindowResize = this.handleWindowResize.bind(this);
+    this.setNodelist = this.setNodelist.bind(this);
   }
 
 
   componentDidMount(){
     const intervalID=setInterval(this.manageCollisions, 20);
-    this.setState({intervalID: intervalID});
+    const nodelist = renderGraph(petersen);
+    this.setState({
+      intervalID: intervalID,
+      node_list: nodelist,
+      nodenum: nodelist.length,
+    });
+    window.addEventListener('resize', this.handleWindowResize);
   }
   componentWillUnmount(){
     clearInterval(this.state.intervalID);
   }
+
+
+  setNodelist(nodelist){
+    this.setState({
+      node_list: nodelist,
+      nodenum: nodelist.length,
+    });
+  }
+
   manageCollisions(){
-    console.log('manageCollisions')
+    // console.log('manageCollisions')
 
     let nodelist=this.state.node_list.slice();
     for(let i=0;i<this.state.nodenum;i++){
@@ -90,7 +233,7 @@ class Board extends React.Component{
 
         if(nodelist[v]==null) continue;
         if(this.detectCollision(u,v)){
-          console.log(u,' collides w ', v);
+          // console.log(u,' collides w ', v);
           this.resolveCollision(u, v, nodelist);
         }
 
@@ -102,9 +245,9 @@ class Board extends React.Component{
     });
   }
   centerPull(u,nodelist){
-    if(this.state.isMouseDown && this.state.moveid == u) return;
-    const dx = nodelist[u].x-mx;
-    const dy = nodelist[u].y-my;
+    if(this.state.isMouseDown && this.state.moveid === u) return;
+    const dx = nodelist[u].x-this.state.mx;
+    const dy = nodelist[u].y-this.state.my;
     const d = Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2));
     
     const nx=dx/d;
@@ -141,13 +284,13 @@ class Board extends React.Component{
     nodelist[v].y-=ny*s/2;
     if(this.state.isMouseDown){
       const moveid=this.state.moveid;
-      if(moveid == u){
+      if(moveid === u){
         nodelist[u].x-=nx*s/2;
         nodelist[u].y-=ny*s/2;
         nodelist[v].x-=nx*s/2;
         nodelist[v].y-=ny*s/2;
       }
-      if(moveid == v){
+      if(moveid === v){
         nodelist[v].x+=nx*s/2;
         nodelist[v].y+=ny*s/2;
         nodelist[u].x+=nx*s/2;
@@ -157,6 +300,19 @@ class Board extends React.Component{
   }
 //resolve with push
 
+  handleWindowResize(){
+    const newnodelist = this.state.node_list.map( (node) => {
+      if(node==null) return node;
+      [node.x,node.y] = GetRandCords();
+      return node;
+    });
+    this.setState({
+      node_list: newnodelist,
+      mx: window.innerWidth/2,
+      my: window.innerHeight/2,
+    })
+
+  }
   handleBoardClick(e){
     // console.log('Board clicked; isDrawing:',this.state.isDrawing);
     console.log('clicked at: ',e.clientX,', ',e.clientY);
@@ -166,9 +322,14 @@ class Board extends React.Component{
     }
     const x=e.clientX;
     const y=e.clientY;
-    const newnode=createNode(x,y,this.state.nodenum);
+    const nxtId=getnextid(this.state.node_list);
+    const newnode=createNode(x,y,nxtId,this.state.nodenum);
+    console.log('next: ',getnextid(this.state.node_list));
     const newlist=this.state.node_list.slice();
-    newlist.push(newnode);
+    if(nxtId<newlist.length)
+      newlist[nxtId]=newnode;
+    else
+      newlist.push(newnode);
     this.setState({
       node_list: newlist,
       nodenum: this.state.nodenum+1,
@@ -214,7 +375,7 @@ class Board extends React.Component{
       this.state.node_list[this.state.id1].adj.push(id2);
       this.state.node_list[id2].adj.push(this.state.id1);
     }
-    console.log('e.target: ',e.target,' e.target.id', e.target.id)
+    // console.log('e.target: ',e.target,' e.target.id', e.target.id)
     this.setState({
       isDrawing: this.state.moved_on_mouseDown?false:isDrawing^1,
       moved_on_mouseDown : false,
@@ -273,8 +434,8 @@ class Board extends React.Component{
     console.log('line clicked')
   }
   render(){
-    mx=window.innerWidth/2;
-    my=window.innerHeight/2;
+    // mx=window.innerWidth/2;
+    // my=window.innerHeight/2;
     const lines=this.state.node_list.map((node) =>{
       if(node==null)
         return null;
@@ -291,10 +452,10 @@ class Board extends React.Component{
     const nodes=this.state.node_list.map((node) =>{
       if(node==null)
         return null;
-      const {x,y,id} = node;
+      const {x,y,id,adj,key} = node;
       return(
         <NodeGroup 
-        key={id}
+        key={key}
         x={x}
         y={y}
         id={id}
@@ -315,26 +476,27 @@ class Board extends React.Component{
     // console.log('node_list',this.state.node_list);
 
     return(
-<svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
-  className="board" onClick={this.handleBoardClick} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}> 
-    <DrawLine isDrawing={this.state.isDrawing} u={this.state.id1} onClick={this.handleLineClick} x1={x1} x2={this.state.x2} y1={y1} y2={this.state.y2}/>
-    
-    {lines}
-    {nodes}
-    <circle cx={`${mx}`} cy={`${my}`} r="5" fill="red"/>
+      <div className="container">
+        <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
+          className="board" onClick={this.handleBoardClick} onMouseMove={this.handleMouseMove} onMouseUp={this.handleMouseUp}> 
+            <DrawLine isDrawing={this.state.isDrawing} u={this.state.id1} onClick={this.handleLineClick} x1={x1} x2={this.state.x2} y1={y1} y2={this.state.y2}/>
+            {lines}
+            {nodes}
+            <circle cx={`${this.state.mx}`} cy={`${this.state.my}`} r="5" fill="red"/>
 
 
-    {/* <line x1="50" y1="50" x2="200" y2="50" className="svg-line"/>
-     <g>
-     <circle cx="50" cy="50" r="19" className="svg-circle"/>
-     <text x="50" y="50" dy=".3em" className="svg-text">1</text>
-     </g>
-     <g>
-     <circle cx="200" cy="50" r="19" className="svg-circle"/>
-     <text x="200" y="50" dy=".3em" className="svg-text">2</text>
-     </g> */}
-     
-</svg>
+            {/* <line x1="50" y1="50" x2="200" y2="50" className="svg-line"/>
+            <g>
+            <circle cx="50" cy="50" r="19" className="svg-circle"/>
+            <text x="50" y="50" dy=".3em" className="svg-text">1</text>
+            </g>
+            <g>
+            <circle cx="200" cy="50" r="19" className="svg-circle"/>
+            <text x="200" y="50" dy=".3em" className="svg-text">2</text>
+            </g> */}
+        </svg>
+        <GraphRepresentation setNodelist={this.setNodelist}/>
+      </div>
     );
     }
  
@@ -344,25 +506,10 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-const getdist = (x1, y1, x2, y2) => Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y1-y2,2));
-
-const getkey = (u,v) => u.toString().concat('->',v.toString());
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 // serviceWorker.unregister();
 
-const createNode = (x,y,id) => {
-  return {
-    x,
-    y,
-    id,
-    // x: x,
-    // y: y,
-    // id: id,
-    // del: 0,
-    adj: [],
-  };
-};
 
