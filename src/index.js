@@ -21,7 +21,7 @@ const dt=0.01;
 
 const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9'
 
-// '10 15
+// 10 15
 // 0 1
 // 0 4
 // 0 5
@@ -36,7 +36,7 @@ const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n
 // 5 7
 // 6 8
 // 6 9
-// 7 9'
+// 7 9
 const createNode = (x,y,id,key) => {
   return {
     x,
