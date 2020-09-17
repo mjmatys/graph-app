@@ -78,25 +78,6 @@ label{
 /* .navbar-container{
   width:100%;
 } */
-.graph-representation{
-  position: fixed;
-  top: 25%;
-  left: 2%;
-  /* top:100px;
-  left: 100px; */
-
-  padding: 10px;
-
-  height: 30%;
-  width: 15%;
-
-  border-radius: 25px;
-  border-style: solid;
-  border-color:#a3a1a1;
-
-  background-color: whitesmoke;
-  /* border-width: 5px; */
-}
 .board {
     /* position: fixed; */
     padding: 0;

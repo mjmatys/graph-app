@@ -50,6 +50,24 @@ const createNodelist = (n,nodelist) => {
   }
 }
 
+const GraphToString = (nodelist) => {
+  let n=0,e=0;
+  let edges=''
+  for(let i=0;i<nodelist.length;i++){
+    if(nodelist[i]==null) continue;
+    n++;
+    for(let j=0;j<nodelist[i].adj.length;j++){
+      const v  = nodelist[i].adj[j]
+      if(i<v){
+        edges+=i.toString()+' '+v.toString()+'\n'
+        e++;
+      }
+    }
+  }
+  const res = n.toString()+' '+e.toString()+'\n'+edges
+  console.log(res)
+  return res
+}
 
 const renderGraph = (value) => {
   const arr = value.split(/[\n]+/);
@@ -384,6 +402,8 @@ export default class Board extends React.Component{
     console.log('line clicked')
   }
   render(){
+
+    GraphToString(this.state.node_list);
     const lines=this.state.node_list.map((node) =>{
       if(node==null)
         return null;
@@ -432,7 +452,7 @@ export default class Board extends React.Component{
             {nodes}
             {/* <circle cx={`${this.state.mx}`} cy={`${this.state.my}`} r="5" fill="red"/> */}
         </svg>
-        <GraphInput renderGraph={renderGraph} setNodelist={this.setNodelist} />
+        <GraphInput InitialValue={GraphToString(this.state.node_list)} renderGraph={renderGraph} setNodelist={this.setNodelist} />
       </div>
     );
     }

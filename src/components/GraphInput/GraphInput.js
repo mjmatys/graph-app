@@ -19,7 +19,7 @@ export default function GraphInput(props){
         <Form className="graph-input" onSubmit={onSubmit}>
             <Form.Group controlId="textarea">
                 <Form.Label>Adjacency List&nbsp;<InputPopover /> </Form.Label>
-                <Form.Control as="textarea" defaultValue={petersen} onChange={(e) => setValue(e.target.value)} />
+                <Form.Control as="textarea" value={props.InitialValue} onChange={(e) => setValue(e.target.value)} />
             </Form.Group>
             <Button variant="primary" type="submit">
             Render!
