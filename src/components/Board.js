@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
+import GraphInput from './GraphInput/GraphInput.js'
 import '../index.css';
 
 //to consider: 
@@ -96,36 +97,33 @@ const GetRandCords = () => {
   const y = Math.random()*0.3*my+0.4*my;
   return [x,y];
 }
+  // const GraphSubmit = (event) => {
+  //   event.preventDefault();
+  //   const nodelist = renderGraph(value);
+  //   props.setNodelist(nodelist);
+  // }
 
-function GraphRepresentation(props){
-  const [value,setValue] = useState('');
+// function GraphInput(props){
+//   const [value,setValue] = useState('');
 
-  const ToNodelist = (event) => {
-    event.preventDefault();
-    // const arr = value.split(/[ \n\t]+/);
-    console.log(value);
-    console.log(petersen);
-    const nodelist = renderGraph(value);
-    props.setNodelist(nodelist);
-  }
   
-  return(
-    <div className="graph-representation">
-    <form onSubmit={ToNodelist} className="mycontainer" style={{textAlign: "center"}}>
-    <label style={{height: "93%"}}>
-    Adjacency List
-    <hr/>
-    {/* <input className="graph-data container" type="text" value={value} onChange={(e) => setValue(e.target.value)}/> */}
-    <textarea className="graph-textarea" value={value} onChange={(e) => setValue(e.target.value)}/>
-    </label>
-    <input type="submit" value="visualize" className="datasubmit"/>
+//   return(
+//     <div className="graph-representation">
+//     <form onSubmit={ToNodelist} className="mycontainer" style={{textAlign: "center"}}>
+//     <label style={{height: "93%"}}>
+//     Adjacency List
+//     <hr/>
+//     {/* <input className="graph-data container" type="text" value={value} onChange={(e) => setValue(e.target.value)}/> */}
+//     <textarea className="graph-textarea" value={value} onChange={(e) => setValue(e.target.value)}/>
+//     </label>
+//     <input type="submit" value="visualize" className="datasubmit"/>
 
-    </form>
+//     </form>
 
-    </div>
-  );
+//     </div>
+//   );
 
-}
+// }
 
 export default class Board extends React.Component{
   constructor(props){
@@ -434,7 +432,7 @@ export default class Board extends React.Component{
             {nodes}
             {/* <circle cx={`${this.state.mx}`} cy={`${this.state.my}`} r="5" fill="red"/> */}
         </svg>
-        <GraphRepresentation setNodelist={this.setNodelist} />
+        <GraphInput renderGraph={renderGraph} setNodelist={this.setNodelist} />
       </div>
     );
     }
