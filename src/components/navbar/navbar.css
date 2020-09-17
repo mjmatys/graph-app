@@ -1,24 +1,15 @@
 .navbar-nav{
-    justify-content: center;
     background-color:#003153; /* prussian blue */
 }
-
+*{
+    margin: 0px;
+    padding: 0px;
+}
 .container-fluid{
     padding: 0px;
 }
-
 .navbarstyle{
-    justify-content: space-between;
-    /* align-content: stretch; */
     padding: 0px;
-}
-
-.inside{
-    padding: 8px 0px;
-}
-
-.side{
-    padding: 8px 16px;
 }
 
 .navbarbrand{
@@ -32,37 +23,33 @@
     /* 426a85 */
 }
 ul > li{
-    display: flex;
-    flex-grow:1;
     list-style-type: none;
-    /* align-items: center; */
 }
 /* .navbar-nav:hover{ */
     /* 0d3754 */
 /* } */
-ul > li > a:hover, ul > li > div > a:hover {
-    background-color: #123954;
-}
 
 
-
-ul > li > a, ul > li > div > a{
-    display: block;
-    width:100%;
-    line-height: 40px;
-    text-align: center;
-    /* display: flex;
-    flex-grow: 1;
-    text-align: center;
-    justify-content: center;
-    align-items: center; */
-}
 ul{
-    /* display: flex; */
-    /* flex-grow: 1; */
-    /* padding: 0px !important; */
     margin: 0px;
 }
-#navbarcollapse{
-    align-items: stretch;
+nav *{
+    display: flex;
+    flex: 1 0 0 !important;
+    align-items: stretch !important;
+}
+.dropdown-toggle::after{
+    content: none;
+}
+a:last-child{
+    color: #edeeef !important;
+    display: flex;
+    flex: 1 0 0;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+a:last-child:hover{
+    color: white !important;
+    background-color: #123954;
 }

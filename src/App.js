@@ -9,10 +9,7 @@ import Board from './components/Board.js'
 export default function App(){
     return(
       <>
-      <div id="navbar-container">
-      {/* <div className="navbar-container"> */}
         <BootstrapNavbar />
-      </div>
       <div className="mycontainer">
         <Board />
       </div>

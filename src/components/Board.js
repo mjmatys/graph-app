@@ -1,7 +1,5 @@
-  import React, {useState} from 'react';
-import ReactDOM from 'react-dom';
+import React, {useState} from 'react';
 import '../index.css';
-import BootstrapNavbar from './navbar/BootstrapNavbar.js'
 
 //to consider: 
 //  multiple lines can run between two nodes
