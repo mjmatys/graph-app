@@ -208,7 +208,7 @@ export default class Board extends React.Component{
   manageCollisions(){
     let nodelist=this.state.node_list.slice();
     for(let i=0;i<this.state.nodenum;i++){
-      if(nodelist[i]==null) continue;
+      if(nodelist[i]==null || (this.state.isMouseDown && this.state.moveid==i)) continue;
       this.centerPull(i,nodelist);
     }
 
@@ -402,6 +402,7 @@ export default class Board extends React.Component{
     console.log('line clicked')
   }
   render(){
+    console.log(navh)
 
     GraphToString(this.state.node_list);
     const lines=this.state.node_list.map((node) =>{
