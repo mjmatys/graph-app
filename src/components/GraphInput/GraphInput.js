@@ -1,30 +1,49 @@
-import React,{useState} from 'react'
+import React,{useState, useEffect} from 'react'
 import InputPopover from './InputPopover/InputPopover.js' 
-import {Form, Button} from 'react-bootstrap'
+// import {Form} from 'react-bootstrap'
+import {Form,Button} from 'react-bootstrap'
+// import RenderAdjList from '../../HelperFunctions/RenderAdjList.js'
 import './GraphInput.css'
 
-const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9'
+// const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9'
 
-export default function GraphInput(props){
-    const [value,setValue] = useState('10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9')
-    const onSubmit = (e) => {
-        e.preventDefault()
-        const nodelist = props.renderGraph(value);
-        props.setNodelist(nodelist);
-        // console.log(value);
+export default function GraphInput({adjList, setAdjList, setGraphity}){
+    // const [value,setValue] = useState(() => adjlist);
+    const [active, setActive] = useState(1);
+    // console.log('initial: ',value);
+    
+    const handlePaginationClick = (e) => {
+        console.log(e.target.parentElement);
+        setActive(e.target.parentElement.id);
+        console.log('active: ',active)
+        setGraphity(e.target.parentElement.id===1)
     }
-   
+
+    const handleChange = (e) => {
+        setAdjList(e.target.value);
+    }
+    console.log(adjList);
     return(
         <>
-        <Form className="graph-input" onSubmit={onSubmit}>
+        {/* <Form className="graph-input" onSubmit={onSubmit}> */}
+        <Form className="graph-input">
             <Form.Group controlId="textarea">
                 <Form.Label>Adjacency List&nbsp;<InputPopover /> </Form.Label>
-                <Form.Control as="textarea" value={props.InitialValue} onChange={(e) => setValue(e.target.value)} />
+                <Form.Control as="textarea" value={adjList} onChange={handleChange}/>
             </Form.Group>
-            <Button variant="primary" type="submit">
-            Render!
-            </Button>
+
+            <ul className="pagination">
+                <li key={1} id={1} className={`page-item ${active===1 ? "active":""}`}>
+                    <a className="page-link" onClick={handlePaginationClick} href="!#">Graphity On</a>
+                </li>
+                <li key={2} id={2} className={`page-item ${active===2 ? "active":""}`}>
+                    <a className="page-link" onClick={handlePaginationClick} href="!#">Graphity Off</a>
+                </li>
+            </ul>
+            {/* <Button type="submit">submit</Button> */}
         </Form>
         </>
     )
 }
+
+// export default GraphInput

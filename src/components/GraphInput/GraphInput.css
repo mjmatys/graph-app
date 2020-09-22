@@ -51,3 +51,24 @@ Button{
     background-color: #244b66 !important;
 
 }
+
+.pagination{
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: stretch;
+    /* flex-grow: 1; */
+}
+.page-item{
+    flex-grow: 1;
+}
+
+.page-link{
+    color: white;
+    background-color: #22455e;
+    border-color: #2e5169 !important;
+    text-align: center;
+}
+.page-item.active .page-link{   
+    background-color:#003153 !important;
+    /* background-color: red !important; */
+}

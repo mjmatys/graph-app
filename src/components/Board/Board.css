@@ -1,0 +1,64 @@
+html,body{
+    /* height:9vh; */
+    height: 100%;
+    margin: 0px;
+    overflow: hidden;
+  }
+  .mycontainer{
+    height:100%;
+    margin: 0px;
+    /* overflow: hidden; */
+  }
+  body {
+    /* background: #EEF0CC	; */
+    background-color: #F5F5F5;
+    background-image: radial-gradient(
+      #B4B4B4 1px,
+      transparent 1px
+    );
+    background-size: 20px 20px;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
+  .board {
+    /* position: fixed; */
+    padding: 0;
+    margin: 0;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+
+
+  /* input[type=submit]{
+    background-color:#EAECCD;
+    border-radius: 5px;
+    width: 100px;
+    height:25px;
+    font-weight: bold;
+  }
+  .graph-textarea{
+    border-style: none;
+    padding:0;
+    width: 100%;
+    height:85%;
+    resize:none;
+    background-color:whitesmoke;
+  }
+  .graph-textarea:focus{
+    outline:none;
+  }
+   */

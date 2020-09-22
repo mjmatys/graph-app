@@ -1,0 +1,8 @@
+.svg-line{
+    stroke: black;
+    stroke-width: 2px;
+  }
+  .svg-line:hover{
+    stroke-width:3px;
+  }
+  

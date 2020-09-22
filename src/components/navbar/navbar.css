@@ -41,7 +41,7 @@ nav *{
 .dropdown-toggle::after{
     content: none;
 }
-a:last-child{
+nav a:last-child{
     color: #edeeef !important;
     display: flex;
     flex: 1 0 0;
