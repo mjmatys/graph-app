@@ -1,6 +1,6 @@
 import React,{useState} from 'react';
 import './index.css';
-import BootstrapNavbar from './components/navbar/BootstrapNavbar.js'
+import BootstrapNavbar from './components/Navbar/BootstrapNavbar.js'
 import Board from './components/Board/Board.js'
 import GraphInput from './components/GraphInput/GraphInput';
 

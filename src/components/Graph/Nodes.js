@@ -4,14 +4,14 @@ import './Node.css'
 
 const r=19;
 
-export default function Nodes({nodelist, handleGroupClick, handleGroupDblClick, handleMouseDown, handleMouseUp}){
+export default function Nodes({nodelist, handleGroupClick, handleMouseDown, handleMouseUp}){
     // console.log('rerender')
     // console.log('nodes: ', nodelist);
     return(
         nodelist.map((node) =>{
             if(node==null)
               return null;
-            const {x,y,id,key} = node;
+            const {x,y,id,key,fixed} = node;
             // console.log(key);
             return(
               <NodeGroup 
@@ -19,8 +19,9 @@ export default function Nodes({nodelist, handleGroupClick, handleGroupDblClick, 
               x={x}
               y={y}
               id={id}
+              fixed={fixed}
               onClick={handleGroupClick}
-              onDoubleClick={handleGroupDblClick}
+              // onDoubleClick={handleGroupDblClick}
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUp}
               />
@@ -28,7 +29,7 @@ export default function Nodes({nodelist, handleGroupClick, handleGroupDblClick, 
           })
     );
 }
-export function createNode(x,y,id,key,boardClicked){
+export function createNode(x,y,id,key,boardClicked=0,fixed=0){
   return {
     x,
     y,
@@ -36,6 +37,7 @@ export function createNode(x,y,id,key,boardClicked){
     adj: [],
     key,
     boardClicked,
+    fixed,
   };
 };
 
@@ -44,7 +46,7 @@ function NodeGroup(props){
     // console.log('nodegroup')
     return(
       <g className="svg-group" id={props.id} onClick={props.onClick} onDoubleClick={props.onDoubleClick} onMouseDown={props.onMouseDown} onMouseUp={props.onMouseUp}> 
-      <circle id={props.id} cx={`${props.x}`} cy={`${props.y}`} r={`${r}`} className="svg-circle" />
+      <circle id={props.id} cx={`${props.x}`} cy={`${props.y}`} r={`${r}`} className={`svg-circle ${props.fixed?"fixed":""}`} />
       <text id={props.id} x={`${props.x}`} y={`${props.y}`} dy=".3em" className="svg-text">{props.id}</text>
     </g>
     );

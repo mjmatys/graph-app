@@ -5,10 +5,20 @@ html,body{
     overflow: hidden;
   }
   .mycontainer{
-    height:100%;
     margin: 0px;
+    height:100%;
+    
+    /* display: flex;
+    align-items: center; */
+
     /* overflow: hidden; */
   }
+
+  #board-div{
+    width: 100%;
+    height: 100%;
+  }
+
   body {
     /* background: #EEF0CC	; */
     background-color: #F5F5F5;

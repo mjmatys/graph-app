@@ -2,7 +2,10 @@
     stroke: black;
     stroke-width: 2px;
   }
+  .nohover{
+    stroke-width:2px !important;
+  }
   .svg-line:hover{
-    stroke-width:3px;
+    stroke-width:3.5px;
   }
   

@@ -12,11 +12,14 @@ export default function GraphInput({adjList, setAdjList, setGraphity}){
     const [active, setActive] = useState(1);
     // console.log('initial: ',value);
     
+    useEffect( () => console.log(active),[active])
+
     const handlePaginationClick = (e) => {
         console.log(e.target.parentElement);
         setActive(e.target.parentElement.id);
+        setGraphity(e.target.parentElement.id==1)
+        console.log('set graphity: ',e.target.parentElement.id==1);
         console.log('active: ',active)
-        setGraphity(e.target.parentElement.id===1)
     }
 
     const handleChange = (e) => {
@@ -33,10 +36,10 @@ export default function GraphInput({adjList, setAdjList, setGraphity}){
             </Form.Group>
 
             <ul className="pagination">
-                <li key={1} id={1} className={`page-item ${active===1 ? "active":""}`}>
+                <li key={1} id={1} className={`page-item ${active==1 ? "active":""}`}>
                     <a className="page-link" onClick={handlePaginationClick} href="!#">Graphity On</a>
                 </li>
-                <li key={2} id={2} className={`page-item ${active===2 ? "active":""}`}>
+                <li key={2} id={2} className={`page-item ${active==2 ? "active":""}`}>
                     <a className="page-link" onClick={handlePaginationClick} href="!#">Graphity Off</a>
                 </li>
             </ul>
