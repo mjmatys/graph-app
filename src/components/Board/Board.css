@@ -13,12 +13,14 @@ html,body{
 
     /* overflow: hidden; */
   }
-
+  svg{
+    position:absolute;
+    /* z-index:2; */
+  }
   #board-div{
     width: 100%;
     height: 100%;
   }
-
   body {
     /* background: #EEF0CC	; */
     background-color: #F5F5F5;
@@ -50,8 +52,31 @@ html,body{
     width: 100%;
     height: 100%;
 }
+.slimeContainer{
+  position: relative;
+  /* display:flex; */
+  justify-content: center;
+  /* width: 100%; */
+  top:8%;
+  /* font-size: xx-large; */
+  /* left: 500px; */
+  z-index:3;
+  
+  /* color: #39ff14; */
+}
 
 
+.slimeBox{
+  display: flex;
+  justify-content: center;
+  font-size: 250%;
+  color: #32cd32;
+  width: 30%;
+
+  border-radius: 5px;
+  background-color: whitesmoke;
+  /* background-color:#dae4ee; */
+}
 
   /* input[type=submit]{
     background-color:#EAECCD;

@@ -1,0 +1,53 @@
+.lockcover{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* background-color: #dae4ee; */
+    /* background-color: grey; */
+    background-color: #EBEBEB;
+    opacity: 0.2;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+  }
+  .flexcenter{
+    position: relative;
+    top: 6%;
+  
+    display: flex;
+    justify-content: center;
+
+    z-index: 2;
+  }
+  
+  .jumbostart{
+    text-align: center;
+    margin: 0px;
+    padding: 2rem;
+    width: 30%;
+    border-radius: 10px;
+    border-radius: 20px;
+
+    opacity: 0.8;
+  }
+  .jumbostart > h2{
+  color: #00a86b; /*jade green */
+  }
+
+  .svg-circle.startNode{
+    stroke: #79dd14;
+    stroke-width: 4px;
+  }
+
+  .animationBoard{
+    z-index: 3;
+  }
+
+  .redLine{
+    stroke: red !important;
+    stroke-width: 3px !important;
+  }
+  .greenLine{
+    stroke: #79dd14 !important;
+    stroke-width: 3px !important;
+  }

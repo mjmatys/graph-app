@@ -22,10 +22,10 @@ export default function Lines({nodelist, handleLineClick}) {
 export function DrawLine(props){
     if(props.isDrawing){
     // console.log(props.isDrawing,'from : ',props.x1,' ',props.y1,' to ',props.x2,' ',props.y2);
-      return <line u={props.u} v={props.v} onClick={props.onClick} className={`svg-line ${props.isDrawing?"nohover":""}` } x1={`${props.x1}`} y1={`${props.y1}`} x2={`${props.x2}`} y2={`${props.y2}`}/>
+      return <line id={getkey(props.u,props.v)} u={props.u} v={props.v} onClick={props.onClick} className={`svg-line ${props.isDrawing?"nohover":""}` } x1={`${props.x1}`} y1={`${props.y1}`} x2={`${props.x2}`} y2={`${props.y2}`}/>
     }
     else return null;
   }
   
-const getkey = (u,v) => u.toString().concat('->',v.toString());
+const getkey = (u,v) => 'e' + Math.min(u,v).toString().concat('--',Math.max(u,v).toString());
 

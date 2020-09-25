@@ -4,17 +4,21 @@ import RenderAdjList from '../../HelperFunctions/RenderAdjList';
 import Lines,{DrawLine} from '../Graph/Lines'
 import Nodes,{createNode} from '../Graph/Nodes.js'
 import Tools from '../Tools/Tools.js'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import AnimateDfs from '../../animations/dfs.js'
 
 
 //to consider: 
 // everything rerenders when drawing lines  
 //consider setting initials graph boardclick to true
 // make new nodes appear closer to corners
-
+const animations = {
+  "dfs": AnimateDfs,
+}
 const r = 19;
 const er=4*r;
 const dt=0.01;
-let navh=80;
+// let navh=80;
 
 const getnextid = (nodelist) => {
   let nullid=-1;
@@ -26,7 +30,6 @@ const getnextid = (nodelist) => {
   }
   return nullid===-1?nodelist.length:nullid;
 }
-
 //actualizes adjlists node and edge count
 const assert_ne = (adjList,nodenum,edgenum) => {
   // if(!nodenum && !edgenum)
@@ -51,7 +54,7 @@ const add_edge = (u,v,adjList) => {
   e++;
   arr[0]=n.toString()+' '+e.toString();
   return arr.join('\n')+'\n'+u.toString()+' '+v.toString();
-};
+}
 
 const remove_edge = (u,v,adjList) => {
   let arr = adjList.split(/[\n]/);
@@ -90,8 +93,9 @@ const remove_edge = (u,v,adjList) => {
 //undirected graph assumption
 const find_edge = (u,v,nodelist) => nodelist[u].adj.indexOf(parseInt(v))!=-1
 
-
-export default function Board({adjList, setAdjList, graphityOn}){ 
+const lock = () => {
+} 
+export default function Board({adjList, setAdjList, graphityOn, setGraphity, animate, setAnimate}){ 
   const latestnodelist = useRef([]);
 
   const [nodelist, setNodelist] = useState([]);
@@ -105,16 +109,22 @@ export default function Board({adjList, setAdjList, graphityOn}){
   const [x2,setx2] = useState(null);
   const [y2,sety2] = useState(null);
   const [mx,setmx] = useState(window.innerWidth/2);
-  const [my,setmy] = useState((window.innerHeight-navh)/2);
+  const [my,setmy] = useState(window.innerHeight/2);
+  // const [my,setmy] = useState((window.innerHeight-navh)/2);
   const [click,setClick] = useState('draw');
-  const [fixall,setFixall] = useState(0);
+  const [fixall,setFixall] = useState(0); //add fixall tool to provide a way for fixing lots of elements by fixing all and then unfixing some/unfixing all elements in 2 clicks
+  const [lock,setLock] = useState(0);
+
 
   // const latestnodelist = useRef(() => RenderAdjList(adjList, [])[0] );
-  
-useEffect( () => {
-  setIsDrawing(0);
-  console.log('click: ',click);
-},[click])
+  useEffect( () => {
+    if(animate)
+      setGraphity(0);
+  },[animate])
+  useEffect( () => {
+    setIsDrawing(0);
+    console.log('click: ',click);
+  },[click])
 
   useEffect( () =>  {
     latestnodelist.current=nodelist;
@@ -138,21 +148,23 @@ useEffect( () => {
     const handleWindowResize = () => {
       console.log('resize');
       console.log('old: ',mx*2,' ',my*2,' new: ',window.innerWidth,' ',window.innerHeight);
-      navh=document.getElementById('navbar-container').clientHeight;
+      // navh=document.getElementById('navbar-container').clientHeight;
       const newnodelist = latestnodelist.current.map( (node) => {
         if(node==null) return node;
         // const [mx,my] = [mx,my];
         console.log(node.x/(mx*2),' ',node.y/(my*2));
-        [node.x,node.y] = [node.x/(mx*2)*window.innerWidth,node.y/(my*2)*(window.innerHeight-navh)];
+        [node.x,node.y] = [node.x/(mx*2)*window.innerWidth,node.y/(my*2)*(window.innerHeight)];
+        // [node.x,node.y] = [node.x/(mx*2)*window.innerWidth,node.y/(my*2)*(window.innerHeight-navh)];
         return node;
       });
-      console.log(navh);
+      // console.log(navh);
       setNodelist(newnodelist);
       setmx(window.innerWidth/2);
-      setmy((window.innerHeight-navh)/2);
+      setmy(window.innerHeight/2);
+      // setmy((window.innerHeight-navh)/2);
     }
     window.addEventListener('resize', handleWindowResize);
-    navh=document.getElementById('navbar-container').clientHeight;
+    // navh=document.getElementById('navbar-container').clientHeight;
     return () => window.removeEventListener('resize', handleWindowResize);
   },[mx,my])  
 
@@ -272,7 +284,8 @@ useEffect( () => {
     }
     if(click=='delete') return;
     const x=e.clientX;
-    const y=e.clientY-navh;
+    const y=e.clientY;
+    // const y=e.clientY-navh;
     const nxtId=getnextid(nodelist);
     const newnode=createNode(x,y,nxtId,nxtId,1);
     const newlist=nodelist.slice();
@@ -298,10 +311,12 @@ useEffect( () => {
   const handleMouseMove = (e) => {
     if(isDrawing){
       setx2(e.clientX);
-      sety2(e.clientY-navh)
+      sety2(e.clientY)
+      // sety2(e.clientY-navh)
     }
-    if(isMouseDown)
-      move(moveid, e.clientX, e.clientY-navh);
+    if(isMouseDown && !lock)
+      move(moveid, e.clientX, e.clientY);
+      // move(moveid, e.clientX, e.clientY-navh);
   }
 
   const handleLineClick = (e) => {
@@ -322,8 +337,17 @@ useEffect( () => {
     // console.log('group click nodelist',nodelist);
     e.stopPropagation();
     console.log('group clicked: ',e.clientX,' ',e.clientY)
-    let id2=e.target.id;
+    // if(lock){
+    //   const id = e.target.id;
+    //   if(dfs){
+    //     document.getElementById(id).children[0].classList.add("startNode");
+    //     console.log(document.getElementById(id).children[0].style.stroke);
+    //     animateDfs(id);
+    //   }
+
+    // }
     if(click=='draw'){
+      let id2=e.target.id;
       if(isDrawing && id1^id2 && !find_edge(id1,id2,nodelist)){
         console.log('find edge ',id1,'--',id2,' ',find_edge(id1,id2,nodelist));
         setAdjList(assert_ne(add_edge(id1,id2,adjList),nodenum,edgenum+1));
@@ -333,11 +357,13 @@ useEffect( () => {
       setMoved_on_mouseDown(false);
       setId1(e.target.id);
       setx2(e.clientX);
-      sety2(e.clientY-navh);
+      sety2(e.clientY);
+      // sety2(e.clientY-navh);
     }
     else if(click=='fix'){
+      let id=e.target.id;
       let newnodelist=nodelist.slice();
-      newnodelist[id2].fixed^=1;
+      newnodelist[id].fixed^=1;
       setNodelist(newnodelist);
     }
     else if(click=='delete'){
@@ -364,66 +390,52 @@ useEffect( () => {
       console.log('after: ',nodenum,' ',edgenum);
       setAdjList(assert_ne(newAdjList,nodenum-1,edgenum-e_del));
       setEdgenum(edgenum => edgenum - e_del);
-      setNodenum(nodenum => nodenum-1);
+      setNodenum(nodenum => nodenum-1); 
     }
   }
-
-  // const handleGroupDblClick = (e) => {
-  //   console.log('nodelist: ',nodelist);
-  //   if(isDrawing) return;
-  //   const idu=parseInt(e.target.id);
-  //   let newnodelist = nodelist.slice();
-  //   let newAdjList = adjList;
-  //   newAdjList = node_add(newAdjList,-1);
-  //   const u = nodelist[idu];
-  //   let e_del = 0;
-  //   u.adj.forEach(v => {
-  //     e_del++;
-  //     // console.log(v);
-  //     newAdjList = remove_edge(idu,v,newAdjList);
-  //     const id = newnodelist[v].adj.indexOf(idu);
-  //     console.log('id: ',id);
-  //     // console.log('id of ',idu,' is ',id);
-  //     // console.log('edge delete',v,'--',newnodelist[v].adj[id]);
-  //     newnodelist[v].adj.splice(id,1);
-  //   });
-  //   newnodelist[idu]=null;
-
-  //   console.log('before: ',nodenum,' ',edgenum);
-  //   setNodelist(newnodelist);
-  //   console.log('after: ',nodenum,' ',edgenum);
-  //   setAdjList(assert_ne(newAdjList,nodenum-1,edgenum-e_del));
-  //   setEdgenum(edgenum => edgenum - e_del);
-  //   setNodenum(nodenum => nodenum-1);
-  // }
 
   const handleMouseDown = (e) => {
     setIsMouseDown(true);
     setMoveid(e.target.id);
     setMoved_on_mouseDown(false);
   }
+  const lockBoard = () => {
+    setLock(1);
+    setGraphity(0);
+  }
 
-//     const x1=(id1 && node_list[id1])?node_list[id1].x:null;
-//     const y1=(id1 && node_list[id1])?node_list[id1].y:null;
-
-
-  return(
-    <div id="board-div">
-      <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
-      className="board" onClick={handleBoardClick} onMouseMove={handleMouseMove} onMouseUp={() => setIsMouseDown(false)}> 
-        <DrawLine isDrawing={isDrawing} onClick={handleLineClick} x1={(id1 && nodelist[id1])?nodelist[id1].x:null} x2={x2} y1={(id1 && nodelist[id1]!=null)?nodelist[id1].y:null} y2={y2}/>
-        <Lines nodelist={nodelist} handleLineClick={handleLineClick}/>
-        <Nodes nodelist={nodelist} handleGroupClick={handleGroupClick} handleMouseDown={handleMouseDown} handleMouseUp={() => setIsMouseDown(false)} />
-        {/* <circle id="999" cx={`${mx}`} cy={`${my}`} r="5" fill="red"/> */}
-
-        {/* <g className="svg-group"> 
-      <circle id="100" cx="100" cy="100" r={`${r}`} className="svg-circle" />
-      <text id="100" x="100" y="100" dy=".3em" className="svg-text">{nodenum}</text>
-    </g> */}
-      </svg>
+  //condition may be faulty
+  if(animate!=null){
+    const CustomTag=animations[animate];
+    // console.log('Tagname: ',CustomTag);
+    return(
+      <>
       <Tools click={click} setClick={setClick} handleFixall={handleFixall} clear={clear}/>
-    // </div>
-
- );
-
+      <CustomTag initNodelist={nodelist}/>
+      {/* <Tag/> */}
+      </>
+      );
+  }
+  else{
+        return(
+          <div id="board-div">
+            <Tools click={click} setClick={setClick} handleFixall={handleFixall} clear={clear}/>
+            <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
+            className="board" onClick={handleBoardClick} onMouseMove={handleMouseMove} onMouseUp={() => setIsMouseDown(false)}> 
+              <DrawLine isDrawing={isDrawing} onClick={handleLineClick} x1={(id1 && nodelist[id1])?nodelist[id1].x:null} x2={x2} y1={(id1 && nodelist[id1]!=null)?nodelist[id1].y:null} y2={y2}/>
+              <Lines nodelist={nodelist} handleLineClick={handleLineClick}/>
+              <Nodes nodelist={nodelist} handleGroupClick={handleGroupClick} handleMouseDown={handleMouseDown} handleMouseUp={() => setIsMouseDown(false)} />
+              {/* <circle id="999" cx={`${mx}`} cy={`${my}`} r="5" fill="red"/> */}
+              {/* <circle id="998" cx="2" cy="2" r="5" fill="red"/> */}
+              {/* <circle id="997" cx="100" cy="100" r="5" fill="red"/> */}
+      
+              {/* <g className="svg-group"> 
+            <circle id="100" cx="100" cy="100" r={`${r}`} className="svg-circle" />
+            <text id="100" x="100" y="100" dy=".3em" className="svg-text">{nodenum}</text>
+          </g> */}
+            </svg>
+          </div>
+       );
+  }
 }
+

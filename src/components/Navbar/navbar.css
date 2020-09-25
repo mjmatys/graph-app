@@ -41,7 +41,22 @@ nav *{
 .dropdown-toggle::after{
     content: none;
 }
-nav a:last-child{
+.dropdown-menu.show{
+    width: 100%;
+    margin-top: 3px !important;
+    background-color: #003153;
+}
+a.dropdown-item{
+    display: flex;
+    justify-content: center;
+    background-color: #003153;
+    color: #edeeef;
+}
+a.dropdown-item.active{
+    background-color: #123954;
+}
+/* nav a:last-child{ */
+nav a.nav-link{
     color: #edeeef !important;
     display: flex;
     flex: 1 0 0;
