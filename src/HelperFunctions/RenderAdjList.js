@@ -28,7 +28,7 @@ export default function RenderAdjList(value, nodelist){
           newnodelist[id] = nodelist[id];
           newnodelist[id].adj = [];
         }
-        console.log('id: ',id);
+        // console.log('id: ',id);
       } 
     });
     newnodelist.forEach( (node) => {if(node) n++;})
@@ -55,8 +55,8 @@ const assert = (newnodelist, u, nodelist,n) => {
 
 const GetRandCords = () => {
     const [mx,my] = [window.innerWidth,window.innerHeight]
-    const x = Math.random()*0.3*mx+0.4*mx;
-    const y = Math.random()*0.3*my+0.4*my;
+    const x = Math.random()*0.4*mx+0.3*mx;
+    const y = Math.random()*0.4*my+0.3*my;
     return [x,y];
   }
   

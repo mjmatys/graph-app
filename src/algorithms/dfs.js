@@ -7,18 +7,13 @@ export default function dfs_inorder(nodelist,s){
     // console.log('visited: ',visited)
     const dfs = (u, p) =>{
         visited[u]=1;
-        // console.log('u: ',u)
         nodelist[u].adj.forEach( (v) =>{
-            // const v=node.id;
-            // console.log('v: ',v,' nodelist[v]', nodelist[v]);
             if(nodelist[v]){
                 if(!visited[v]){
-                    // console.log(u,'--',v,'not visited');
                     inorder.push([v,1]); //not visited, green highlight; visit
                     dfs(v,u);
                 }
                 else{
-                    // console.log(u,'--',v,'visited');
                     inorder.push([v,0]) //visited, red highlight; proceed
                 }
             }

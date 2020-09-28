@@ -39,6 +39,16 @@
     stroke-width: 4px;
   }
 
+  .visitedNode{
+    stroke: red;
+    stroke: 3px;
+  }
+
+  .svg-circle.currentNode{
+    stroke: #0f52ba !important;
+    stroke-width: 3.5px !important;
+  }
+
   .animationBoard{
     z-index: 3;
   }
@@ -50,4 +60,12 @@
   .greenLine{
     stroke: #79dd14 !important;
     stroke-width: 3px !important;
+  }
+
+  .centerImg{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 18px;
+    width: 18px;
   }

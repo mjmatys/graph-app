@@ -4,6 +4,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
 // import {Button} from 'react-bootstrap'
 import qmark from './qmark.svg'
+import Qmark from '../../../Icons/Qmark.js'
 import './InputPopover.css'
 
 

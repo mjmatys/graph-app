@@ -18,14 +18,14 @@ export default function GraphInput({adjList, setAdjList, setGraphity}){
         console.log(e.target.parentElement);
         setActive(e.target.parentElement.id);
         setGraphity(e.target.parentElement.id==1)
-        console.log('set graphity: ',e.target.parentElement.id==1);
-        console.log('active: ',active)
+        // console.log('set graphity: ',e.target.parentElement.id==1);
+        // console.log('active: ',active)
     }
 
     const handleChange = (e) => {
         setAdjList(e.target.value);
     }
-    console.log(adjList);
+    // console.log(adjList);
     return(
         <>
         {/* <Form className="graph-input" onSubmit={onSubmit}> */}

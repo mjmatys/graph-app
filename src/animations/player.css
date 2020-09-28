@@ -1,0 +1,39 @@
+@media screen and (max-width: 992px) {
+    .player{
+        left: 2% !important;
+    }
+}
+
+.player{
+    display: flex;
+    flex-direction: row;
+
+    background-color: #244b66;
+
+    border-radius: 5px;
+    width: 20%;
+
+    position: absolute;
+    bottom: 6%;
+    left: 40%;
+
+    min-width: 200px;
+
+    z-index: 4;
+}
+
+.playerItem{
+    display: flex;
+    justify-content: center;
+    flex: 1 0 0;
+}
+
+.playerItem:hover{
+    background-color:#003153 !important;
+}
+input[type=image]{
+width: 30px;
+height: 30px;
+padding-right: fill;
+padding-left: auto;
+}

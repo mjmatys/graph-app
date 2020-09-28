@@ -1,4 +1,4 @@
-.tools-list-col{
+/* .tools-list-col{
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -10,7 +10,7 @@
     padding: 0px;
     padding: 7px 5px;
     background-color: #244b66;
-}
+} */
 .tools-list-row{
     display: flex;
     flex-direction: row;
@@ -60,7 +60,9 @@
 a:hover{
     text-decoration: none;
 }
-
+input:focus{
+    outline: none;
+}
 .border-bottom{
     border-bottom: 1px solid #3f6480 !important;
     padding-bottom: 2.5px;
