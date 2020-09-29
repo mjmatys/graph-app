@@ -40,6 +40,7 @@ export function createNode(x,y,id,key,boardClicked=0,fixed=0,cClasses=""){
     boardClicked,
     fixed,
     cClasses,
+    lClasses: new Map(),
   };
 };
 

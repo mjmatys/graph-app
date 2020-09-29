@@ -5,7 +5,8 @@ import Lines,{DrawLine} from '../Graph/Lines'
 import Nodes,{createNode} from '../Graph/Nodes.js'
 import Tools from '../Tools/Tools.js'
 import Jumbotron from 'react-bootstrap/Jumbotron'
-import AnimateDfs from '../../animations/dfs.js'
+import AnimateDfs from '../../animations/AnimateDfs.js'
+import AnimateBfs from '../../animations/AnimateBfs';
 
 
 //to consider: 
@@ -14,6 +15,7 @@ import AnimateDfs from '../../animations/dfs.js'
 // make new nodes appear closer to corners
 const animations = {
   "dfs": AnimateDfs,
+  "bfs": AnimateBfs,
 }
 const r = 19;
 const er=4*r;
@@ -411,7 +413,7 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
     return(
       <>
       <Tools click={click} setClick={setClick} handleFixall={handleFixall} clear={clear}/>
-      <CustomTag initNodelist={nodelist}/>
+      <CustomTag initNodelist={nodelist} setAnimate={setAnimate} setGraphity={setGraphity}/>
       {/* <Tag/> */}
       </>
       );

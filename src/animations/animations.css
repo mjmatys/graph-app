@@ -69,3 +69,7 @@
     height: 18px;
     width: 18px;
   }
+
+  .enqueuedNode{
+    stroke-color: lightblue;
+  }

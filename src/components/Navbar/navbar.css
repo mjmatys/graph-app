@@ -52,6 +52,10 @@ a.dropdown-item{
     background-color: #003153;
     color: #edeeef;
 }
+a.dropdown-item:hover{
+    background-color: #123954;
+    color: white;
+}
 a.dropdown-item.active{
     background-color: #123954;
 }

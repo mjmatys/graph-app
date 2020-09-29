@@ -4,8 +4,9 @@ import './navbar.css'
 // import AnimateDfs from '../../animations/dfs.js'
 
 export default function BootstrapNavbar(props){
-    const handleDfs = () => {
-        props.setAnimate("dfs");
+    const handleDropdown = (e) => {
+        console.log(e.target.id);
+        props.setAnimate(e.target.id);
     }
     return(
         <div id="navbar-container">
@@ -19,7 +20,8 @@ export default function BootstrapNavbar(props){
 
                                 <li>
                                     <NavDropdown title="Algorithms" >
-                                        <NavDropdown.Item href="!#" onClick={handleDfs}>DFS</NavDropdown.Item>
+                                        <NavDropdown.Item id="dfs" href="!#" onClick={handleDropdown}>DFS</NavDropdown.Item>
+                                        <NavDropdown.Item id="bfs" href="!#" onClick={handleDropdown}>BFS</NavDropdown.Item>
                                     </NavDropdown>
                                 </li>
                             </ul>   
