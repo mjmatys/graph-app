@@ -36,6 +36,7 @@
 
   .svg-circle.startNode{
     stroke: #79dd14;
+    /* stroke: #32cd32; */
     stroke-width: 4px;
   }
 
@@ -46,7 +47,7 @@
 
   .svg-circle.currentNode{
     stroke: #0f52ba !important;
-    stroke-width: 3.5px !important;
+    stroke-width: 4.5px !important;
   }
 
   .animationBoard{
@@ -58,6 +59,7 @@
     stroke-width: 3px !important;
   }
   .greenLine{
+    /* stroke: #32cd32 !important; */
     stroke: #79dd14 !important;
     stroke-width: 3px !important;
   }
@@ -71,5 +73,31 @@
   }
 
   .enqueuedNode{
-    stroke-color: lightblue;
+    /* stroke: #0073cf; */
+    stroke: #32cd32;
+    stroke-width: 3px;
+  }
+  .dequeuedNode{
+    fill: lightgrey;
+    stroke: grey;
+  }
+
+  .enqLine{
+  stroke: #0073cf;
+  stroke-width: 3px !important;
+  }
+
+
+  @keyframes dash{
+    to{
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes expand{
+    0% {stroke-width: 0px}
+    50% {stroke-width: 4px}
+    100% {stroke-width: 0px}
+    /* to{
+      stroke-width: 3px;
+    } */
   }

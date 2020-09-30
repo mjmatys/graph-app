@@ -10,8 +10,8 @@ const sqGraph = '4 4\n0 1\n1 2\n2 3\n3 0'
 
 
 export default function App(){
-  // const [adjList,setAdjList] = useState(petersen);
-  const [adjList,setAdjList] = useState(sqGraph);
+  const [adjList,setAdjList] = useState(petersen);
+  // const [adjList,setAdjList] = useState(sqGraph);
   // const [adjList,setAdjList] = useState('1 0\n1');
   const [graphityOn, setGraphity] = useState(true); 
   const [animate, setAnimate] = useState(null);

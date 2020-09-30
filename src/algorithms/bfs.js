@@ -2,6 +2,7 @@ export default function bfs(s,nodelist){
     let inorder = [[s,null,null]];
     let q = [s];
     let vis = new Array(nodelist.length).fill(0);
+    vis[s]=1;
     for(let i=0;i<q.length;i++){
         // console.log('DUPA');
         const u = q[i];

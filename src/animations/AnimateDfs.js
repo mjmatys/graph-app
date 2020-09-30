@@ -9,17 +9,22 @@ import {cloneDeep} from 'lodash'
 import './animations.css'
 
 let inorder = [];
-let startid = 0;
-const stpDelay=300;
-const animDelay=500;
+// let startedid = 0;
+// const stpDelay=300;
+// const animDelay=500;
 const initCoords = {
   x1: 0,
   y1: 0,
   x2: 0,
   y2: 0,
 }
-const eps = 4;
-const v = 8;
+
+const arrowSpeed = animDelay =>{
+return 200/animDelay;
+} 
+
+const eps = 19;
+const v = 10;
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve,delay))
 
 const calculateRotation = (x1,y1,x2,y2) => {
@@ -43,7 +48,7 @@ const dist = (x1,y1,x2,y2) => Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
 export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
     const [nodelist,setNodelist] = useState(initNodelist);
     const [step,setStep] = useState(() => -1);
-    const [start,setStart] = useState(0);
+    const [started,setStarted] = useState(0);
     // const [cur,setCur] = useState(null)
     const [wait,setWait] = useState(0);
     const [delay,setDelay] = useState(0);
@@ -55,19 +60,26 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
     // const [lClasses, setlClasses] = useState([]) //history of line's classes; array of lines id; on ith step color first i lines green
     const [playing,setPlaying] = useState(1);
     const [history,setHistory] = useState([]);
+    const [animDelay,setAnimDelay] = useState(500)
+    // const [v,setV] = useState(12);
+
+    // useEffect( () => {
+    //   setV(12*arrowSpeed(animDelay));
+    // },[animDelay])
 
     useEffect( () => {
-      if(start){
+      if(started){
         console.log('step: ',step,' history: ',history);
         if(step<0) setStep(0);
         else if(step>=history.length) setStep(history.length-1);
         else setNodelist(history[step]);
       }
-    },[step,history,start])
+    },[step,history,started])
 
     useEffect( () => {
       const nextStep = async () => {
-        if(!start || inorder[step+1][1]==null || wait || moving || !playing) return;
+        console.log('moving: ',moving);
+        if(!started || inorder[step+1][1]==null || wait || moving || !playing) return;
 
         if(delay){
           await sleep(1000);
@@ -129,9 +141,9 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
           console.log('u: ',u,' v: ',v,' action: ',action);
           setStep( (step) => step+1 );
       }
-      const interval = setInterval(nextStep,stpDelay);
+      const interval = setInterval(nextStep,animDelay);
       return () => clearInterval(interval);
-    },[step,start,wait,moving,nodelist,playing,delay])
+    },[step,started,wait,moving,nodelist,playing,delay,animDelay])
 
     useEffect( () => {
       const id = setInterval(move,20);
@@ -155,25 +167,25 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
     }
 
     const handleGroupClick = (e) => {
-      if(!start){
-        console.log('start click');
+      if(!started){
+        console.log('started click');
         let newnodelist = cloneDeep(nodelist);
         const id=e.target.id;
 
-        newnodelist[id].cClasses+=" startNode currentNode";
+        newnodelist[id].cClasses+=" startedNode currentNode";
         inorder = dfs_inorder(nodelist, id);
 
         // setNodelist(newnodelist);
         setHistory(history.concat([newnodelist]));
         setShow(0);
-        setStart(1);
+        setStarted(1);
       }
     }
 
     return(
       <>
         <div className="lockcover" />
-        <JumboText show={show} text="Choose Start Node"/>
+        <JumboText show={show} text="Choose started Node"/>
         <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
             className="board animationBoard "> 
         <Lines nodelist={nodelist} />
@@ -181,7 +193,10 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
         <Nodes nodelist={nodelist} handleGroupClick={handleGroupClick}/>
         {/* <path transform="translate(200,200)" d="M8.122 24L4 20l8-8-8-8 4.122-4L20 12z" />  */}
           </svg>
-          <Player start={start} playing={playing} setPlaying={setPlaying} setStep={setStep} setDelay={setDelay} setAnimate={setAnimate} setGraphity={setGraphity}/>
+          <Player started={started} setStarted={setStarted} playing={playing} setPlaying={setPlaying} 
+          setStep={setStep} setDelay={setDelay} setAnimate={setAnimate} setGraphity={setGraphity}
+          animDelay={animDelay} setAnimDelay={setAnimDelay}
+          />
       </> 
     );
 }
