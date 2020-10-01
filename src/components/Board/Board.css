@@ -97,3 +97,7 @@ html,body{
     outline:none;
   }
    */
+
+  /* .noselect{
+    pointer-events: none;
+  } */

@@ -9,9 +9,6 @@ import {cloneDeep} from 'lodash'
 import './animations.css'
 
 let inorder = [];
-// let startedid = 0;
-// const stpDelay=300;
-// const animDelay=500;
 const initCoords = {
   x1: 0,
   y1: 0,
@@ -32,14 +29,11 @@ const calculateRotation = (x1,y1,x2,y2) => {
   const dy = y2-y1;
   const d = Math.sqrt(Math.pow(dx,2)+Math.pow(dy,2));
   const sin = dy/d;
-  // // console.log('sin: ',sin);
   let a = Math.asin(sin)*57.3248407643;
-  // // console.log('asin: ',a);
   if(dx<0){
     if(dy>=0) a=180-a;
     else a=-180-a;
   }
-  // // console.log('deg: ',a);
   return a;
 }
 
@@ -49,23 +43,16 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
     const [nodelist,setNodelist] = useState(initNodelist);
     const [step,setStep] = useState(() => -1);
     const [started,setStarted] = useState(0);
-    // const [cur,setCur] = useState(null)
     const [wait,setWait] = useState(0);
     const [delay,setDelay] = useState(0);
     const [show,setShow] = useState(1);
     const [coords,setCoords] = useState(initCoords);
     const [deg, setDeg] = useState(0);
     const [moving,setMoving] = useState(0);
-    // const [nextCur,setNextCur] = useState(null);
-    // const [lClasses, setlClasses] = useState([]) //history of line's classes; array of lines id; on ith step color first i lines green
     const [playing,setPlaying] = useState(1);
     const [history,setHistory] = useState([]);
     const [animDelay,setAnimDelay] = useState(500)
-    // const [v,setV] = useState(12);
 
-    // useEffect( () => {
-    //   setV(12*arrowSpeed(animDelay));
-    // },[animDelay])
 
     useEffect( () => {
       if(started){
@@ -175,7 +162,6 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
         newnodelist[id].cClasses+=" startedNode currentNode";
         inorder = dfs_inorder(nodelist, id);
 
-        // setNodelist(newnodelist);
         setHistory(history.concat([newnodelist]));
         setShow(0);
         setStarted(1);
@@ -185,13 +171,12 @@ export default function AnimateDfs({initNodelist, setAnimate, setGraphity}){
     return(
       <>
         <div className="lockcover" />
-        <JumboText show={show} text="Choose started Node"/>
+        <JumboText show={show} text="Choose starting Node"/>
         <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
             className="board animationBoard "> 
         <Lines nodelist={nodelist} />
         <Arrow show={moving} x={coords['x1']} y={coords['y1']} deg={deg}/>
         <Nodes nodelist={nodelist} handleGroupClick={handleGroupClick}/>
-        {/* <path transform="translate(200,200)" d="M8.122 24L4 20l8-8-8-8 4.122-4L20 12z" />  */}
           </svg>
           <Player started={started} setStarted={setStarted} playing={playing} setPlaying={setPlaying} 
           setStep={setStep} setDelay={setDelay} setAnimate={setAnimate} setGraphity={setGraphity}

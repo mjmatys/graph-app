@@ -16,14 +16,10 @@ export default function ShootLine({show, animDelay, x1,y1,x2,y2}){
     const getStyles = () =>{
         const len = dist(x1,y1,x2,y2);
         let speed = getLineDelay(animDelay);
-        // let speed=1;
-        // console.log('speed:',speed)      
         return{
             strokeDasharray: `${len}`,
             strokeDashoffset: `${len}`,
             animation: `dash ${speed}s linear`,
-            // stroke: "#0073cf",
-            // strokeWidth: "3px", 
         }
     }
     if(show)

@@ -13,7 +13,6 @@ let showJumbo=1;
 let started=0;
 let inorder = [];
 const stpDelay=800;
-// const animDelay=500;
 const initCoords = {
   x1: 0,
   y1: 0,
@@ -50,7 +49,6 @@ export default function AnimateBfs({initNodelist,setAnimate,setGraphity}){
     useEffect( () => {
       latesthistory.current = history;
     },[history])
-    // console.log('started: ',)
     useEffect( () => {
         if(started){
           console.log('step: ',step,' history: ',latesthistory.current);
@@ -107,14 +105,6 @@ export default function AnimateBfs({initNodelist,setAnimate,setGraphity}){
 
 
                 if(action==0){
-                    // document.querySelector(str).classList.add('redLine');
-                    // let newnodelist = cloneDeep(nodelist);
-                    // newnodelist[Math.min(u,v)].lClasses.set(Math.max(u,v), 'redLine');
-                    // setWait(1);
-                    // await sleep(animDelay);
-                    // setWait(0);
-                    // document.querySelector(str ).classList.remove('redLine');
-
                     let newnodelist=cloneDeep(nodelist);
                     setCoords({
                       x1: nodelist[u].x, 
@@ -126,9 +116,6 @@ export default function AnimateBfs({initNodelist,setAnimate,setGraphity}){
                     setWait(1);
                     await sleep(getLineDelay(animDelay)*1.5-30);
                     setWait(0);
-
-                    // newnodelist[Math.min(u,v)].lClasses.set(Math.max(u,v), 'redLine');
-                    // newnodelist[v].cClasses+=' enqueuedNode'
                     setNodelist(newnodelist);
                     setExpand(0);
 
@@ -146,7 +133,6 @@ export default function AnimateBfs({initNodelist,setAnimate,setGraphity}){
                   setShoot(1)
                   setWait(1);
                   await sleep(getLineDelay(animDelay)-30);
-                  // await sleep(getLineDelay(animDelay));
                   setWait(0);
                   newnodelist[Math.min(u,v)].lClasses.set(Math.max(u,v), 'greenLine');
                   newnodelist[v].cClasses+=' enqueuedNode'
@@ -174,7 +160,6 @@ export default function AnimateBfs({initNodelist,setAnimate,setGraphity}){
           inorder = bfs_inorder(id,nodelist);
           console.log('inorder: ',inorder);
   
-          // setNodelist(newnodelist);
           setHistory(history.concat([newnodelist]));
           showJumbo=0;
           setStarted(1);
@@ -183,13 +168,12 @@ export default function AnimateBfs({initNodelist,setAnimate,setGraphity}){
     return(
         <>
         <div className="lockcover" />
-        <JumboText show={showJumbo} text="Choose started Node"/>
+        <JumboText show={showJumbo} text="Choose starting Node"/>
         <svg version="1.1" baseProfile="full" xmlns="http://www.w3.org/2000/svg" 
             className="board animationBoard "> 
         <Lines nodelist={nodelist} />
         <ShootLine show={shoot} setShow={setShoot} animDelay={animDelay} {...coords} />
         <ExpandLine show={expand} setShow={setExpand} animDelay={animDelay} {...coords} />
-        {/* <Arrow show={moving} x={coords['x1']} y={coords['y1']} deg={deg}/> */}
         <Nodes nodelist={nodelist} handleGroupClick={handleGroupClick}/>
           </svg>
           <Player started={started} setStarted={setStarted} playing={playing} setPlaying={setPlaying} 

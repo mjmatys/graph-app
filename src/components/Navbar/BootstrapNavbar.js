@@ -1,10 +1,10 @@
 import React from 'react'
 import { Navbar,Nav,NavDropdown} from 'react-bootstrap'
 import './navbar.css'
-// import AnimateDfs from '../../animations/dfs.js'
 
 export default function BootstrapNavbar(props){
     const handleDropdown = (e) => {
+        e.preventDefault();
         console.log(e.target.id);
         props.setAnimate(e.target.id);
     }

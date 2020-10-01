@@ -27,25 +27,31 @@ export default function Player({playing, setPlaying, setStep, started, setStarte
         setDelay(1);
         setStep( step => step+1 );
     }
+    const handleCancel = () => {
+        setAnimate(null);
+        setGraphity(1); 
+        setStarted(0);
+        console.log('CANCEL');
+    }
 
     return(
         <div className="playerwrap">
             <ul className="player">
                 <li className="playerItem border-right leftside" onClick={handleRewind}>
-                    <input  type="image" src={rewind}/>
+                    <input  type="image" src={rewind} className="noselect" />
                 </li>
                 <li className="playerItem border-right" onClick={() =>{if(started) setPlaying(playing => playing^1)}}>
-                    <input type="image" src={playing?pause:play} />
+                    <input type="image" className="noselect" src={playing?pause:play} />
                 </li>
                 <li className="playerItem rightside" onClick={handleFforward}>
-                    <input type="image" src={fforward} />
+                    <input type="image" className="noselect" src={fforward} />
                 </li>
             </ul>
             <RangeSlider value={value} min={50} max={2000}  
             onChange={changeEvent => setValue(parseInt(changeEvent.target.value))}
             className="speedslider"
             />
-            <input type="image" src={cancel} className="btn-cancelAnimation" onClick={() => {setAnimate(null); setGraphity(1); setStarted(0);}}/>
+            <input type="image" src={cancel} className="btn-cancelAnimation" onClick={handleCancel}/>
         </div>
     );
 }
