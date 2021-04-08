@@ -15,6 +15,7 @@ export default function App(){
   // const [adjList,setAdjList] = useState(sqGraph);
   const [graphityOn, setGraphity] = useState(true); 
   const [animate, setAnimate] = useState(null);
+  const [formAdjList,setFormAdjList] = useState(adjList);
 
   const boardProps = {
     adjList,
@@ -23,13 +24,21 @@ export default function App(){
     setGraphity,
     animate,
     setAnimate,
+    setFormAdjList,
+  }
+
+  const graphInputProps = {
+    setAdjList,
+    setGraphity,
+    formAdjList,
+    setFormAdjList,
   }
     return(
       <>
         <BootstrapNavbar setAnimate={setAnimate}/>
       <div className="mycontainer">
         <Board {...boardProps}/>
-        <GraphInput  adjList={adjList} setGraphity={setGraphity} setAdjList={setAdjList}/>
+        <GraphInput  {...graphInputProps}/>
       </div>
       </>
   

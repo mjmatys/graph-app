@@ -75,7 +75,7 @@ const find_edge = (u,v,nodelist) => nodelist[u].adj.indexOf(parseInt(v))!=-1
 
 const lock = () => {
 } 
-export default function Board({adjList, setAdjList, graphityOn, setGraphity, animate, setAnimate}){ 
+export default function Board({adjList, setAdjList, graphityOn, setGraphity, animate, setAnimate, setFormAdjList}){ 
   const latestnodelist = useRef([]);
 
   const [nodelist, setNodelist] = useState([]);
@@ -252,6 +252,7 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
       setNodelist(newlist);
       setAdjList(assert_ne(adjList,nodenum+1,edgenum));
       setNodenum(nodenum => nodenum+1);
+      setFormAdjList(adjList);
   }
 
   const move = (id, x, y) => {
@@ -291,6 +292,8 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
         console.log('find edge ',id1,'--',id2,' ',find_edge(id1,id2,nodelist));
         setAdjList(assert_ne(add_edge(id1,id2,adjList),nodenum,edgenum+1));
         setEdgenum(edgenum => edgenum+1);
+
+      setFormAdjList(adjList);
       }
       setIsDrawing(moved_on_mouseDown?false:isDrawing^1);
       setMoved_on_mouseDown(false);
@@ -326,6 +329,7 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
       setAdjList(assert_ne(newAdjList,nodenum-1,edgenum-e_del));
       setEdgenum(edgenum => edgenum - e_del);
       setNodenum(nodenum => nodenum-1); 
+      setFormAdjList(adjList);
     }
   }
 

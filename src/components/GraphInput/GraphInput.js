@@ -7,8 +7,8 @@ import './GraphInput.css'
 
 // const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9'
 
-export default function GraphInput({adjList, setAdjList, setGraphity}){
-    // const [value,setValue] = useState(() => adjlist);
+export default function GraphInput({setAdjList, setGraphity, formAdjList, setFormAdjList}){
+    // const [value,setValue] = useState(adjList);
     const [active, setActive] = useState(1);
     // console.log('initial: ',value);
     
@@ -23,6 +23,8 @@ export default function GraphInput({adjList, setAdjList, setGraphity}){
     }
 
     const handleChange = (e) => {
+        // setValue(e.target.value);
+        setFormAdjList(e.target.value);
         setAdjList(e.target.value);
     }
     // console.log(adjList);
@@ -32,7 +34,7 @@ export default function GraphInput({adjList, setAdjList, setGraphity}){
         <Form className="graph-input">
             <Form.Group controlId="textarea">
                 <Form.Label>Adjacency List&nbsp;<InputPopover /> </Form.Label>
-                <Form.Control as="textarea" value={adjList} onChange={handleChange}/>
+                <Form.Control as="textarea" value={formAdjList} onChange={handleChange}/>
             </Form.Group>
 
             <ul className="pagination">
