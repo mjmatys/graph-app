@@ -36,7 +36,7 @@ const assert_ne = (adjList,nodenum,edgenum) => {
   return arr.join('\n');
 }
 
-const node_add = (adjList,a) => {
+const nodenum_add = (adjList,a) => {
   let arr = adjList.split(/[\n]/);
   let [n,e] = arr[0].split(/[ \t]+/);
   n = parseInt(n);
@@ -54,13 +54,15 @@ const add_edge = (u,v,adjList) => {
 }
 
 const remove_edge = (u,v,adjList) => {
+  console.log('remove edge from'+u+' to '+v);
   let arr = adjList.split(/[\n]/);
   let [n,e] = arr[0].split(/[ ]+/);
-  for(let i=1;i<=e;i++){
+  for(let i=1;i<arr.length;i++){
     let pair = arr[i].split(/[ ]+/);
     if(pair[0]==='')
       pair.shift();
     let [s,t] = pair;
+    console.log('s: '+s+' t: '+t);
     if((u==s && v==t) || (u==t && v==s)){
       arr.splice(i--,1);
       e--;
@@ -70,11 +72,46 @@ const remove_edge = (u,v,adjList) => {
   return arr.join('\n');
 
 }
-//undirected graph assumption
-const find_edge = (u,v,nodelist) => nodelist[u].adj.indexOf(parseInt(v))!=-1
 
-const lock = () => {
-} 
+const appendIsolatedId = (adjList,id) => adjList+"\n"+id;
+
+
+
+//undirected graph assumption
+const find_edge = (u,v,nodelist) => nodelist[u].adj.indexOf(parseInt(v))!=-1;
+
+const remove_incident_edges = (adjList,id_u) => {
+  let arr = adjList.split(/[\n]/);
+  let [n,e] = arr[0].split(/[\s]+/);
+  for(let i=1;i<arr.length;i++){
+    let pair = arr[i].split(/[\s]+/);
+    if(pair[0]==='')
+      pair.shift();
+    let [s,t] = pair;
+    console.log("s: "+s+" t: "+t);
+    if((id_u==s || id_u==t)){
+      arr.splice(i--,1);
+      if(!isNaN(s) && !isNaN(t)) e--;
+    }
+  }
+  arr[0]=n.toString()+' '+e.toString();
+  console.log("remove_incident_edges \ninput: "+adjList+"\noutput: "+arr.join('\n'));
+  return arr.join('\n');
+}
+
+let cnt=0;
+
+// const adjust_to_nodenum = (nodelist) => {
+//   if(nodenum)
+// }
+
+const get_nodenum = (adjList) => {
+  let arr = adjList.split(/[\n]/);
+  let [n,e] = arr[0].split(/[ \t]+/);
+  n = parseInt(n);
+  return n;
+}
+
 export default function Board({adjList, setAdjList, graphityOn, setGraphity, animate, setAnimate, setFormAdjList}){ 
   const latestnodelist = useRef([]);
 
@@ -95,6 +132,7 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
   const [lock,setLock] = useState(0);
 
 
+
   useEffect( () => {
     if(animate)
       setGraphity(0);
@@ -110,10 +148,12 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
 
   useEffect( () => {
     const [newnodelist,n,e] = RenderAdjList(adjList, latestnodelist.current.slice())
+    setFormAdjList(adjList);
+    console.log("useEffect[adjList]: "+cnt++);
     setNodelist(() => newnodelist);
     setNodenum(n);
     setEdgenum(e);
-    setAdjList(assert_ne(adjList,nodenum,edgenum));
+    setAdjList(assert_ne(adjList,n,edgenum));
     console.log('ref: ',latestnodelist.current)
   },[adjList,nodenum,edgenum])  
   
@@ -216,6 +256,14 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
     return () => clearInterval(intervalID);
   },[mx,my,graphityOn,nodenum,moveid,isMouseDown]);
 
+//add isolated index to form
+const addIsolatedId = (id) => {
+  let newAdjList = adjList+'\n'+id;
+  setAdjList(newAdjList);
+  // setFormAdjList(newAdjList);
+}
+
+
   const clear = () => {
     setAdjList('');
     setNodelist([]);
@@ -250,9 +298,11 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
       newlist.push(newnode);
     
       setNodelist(newlist);
-      setAdjList(assert_ne(adjList,nodenum+1,edgenum));
+      let newAdjList = assert_ne(appendIsolatedId(adjList,nxtId),nodenum+1,edgenum);
+      // let newAdjList = assert_ne(adjList,nxtId,nodenum+1,edgenum);
+      setAdjList(newAdjList);
+      // setFormAdjList(newAdjList);
       setNodenum(nodenum => nodenum+1);
-      setFormAdjList(adjList);
   }
 
   const move = (id, x, y) => {
@@ -278,8 +328,10 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
     if(isDrawing) setIsDrawing(isDrawing^1);
     if(click=='delete'){
       const [u,v] = [e.target.getAttribute("u"),e.target.getAttribute("v")];
-      const newadjlist = remove_edge(u,v,adjList);
-      setAdjList(newadjlist);
+      console.log('before line del: '+adjList);
+      const newAdjList = remove_edge(u,v,adjList);
+      console.log('after line del: '+newAdjList);
+      setAdjList(newAdjList);
     }
   }
 
@@ -293,7 +345,7 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
         setAdjList(assert_ne(add_edge(id1,id2,adjList),nodenum,edgenum+1));
         setEdgenum(edgenum => edgenum+1);
 
-      setFormAdjList(adjList);
+      // setFormAdjList(adjList);
       }
       setIsDrawing(moved_on_mouseDown?false:isDrawing^1);
       setMoved_on_mouseDown(false);
@@ -311,25 +363,34 @@ export default function Board({adjList, setAdjList, graphityOn, setGraphity, ani
       const idu=parseInt(e.target.id);  
       let newnodelist = nodelist.slice();
       let newAdjList = adjList;
-      newAdjList = node_add(newAdjList,-1);
+      newAdjList = nodenum_add(newAdjList,-1);
       const u = nodelist[idu];
       let e_del = 0;
+      console.log("neighbors of "+idu);
+      newAdjList = remove_incident_edges(newAdjList,idu);
       u.adj.forEach(v => {
         e_del++;
-        newAdjList = remove_edge(idu,v,newAdjList);
+        // newAdjList = remove_edge(idu,v,newAdjList);
         const id = newnodelist[v].adj.indexOf(idu);
-        console.log('id: ',id);
         newnodelist[v].adj.splice(id,1);
+        console.log("newnodelist["+v+"].adj.length:"+newnodelist[v].adj.length);
+        if(newnodelist[v].adj.length==0) newAdjList = appendIsolatedId(newAdjList,v);
+        console.log(newnodelist[v]);
       });
       newnodelist[idu]=null;
   
-      console.log('before: ',nodenum,' ',edgenum);
+      // console.log('before: ',newnodelist,'\n',newAdjList);
+      console.log('newnodelist: ',newnodelist,'\nnewAdjList: ',newAdjList);
       setNodelist(newnodelist);
-      console.log('after: ',nodenum,' ',edgenum);
+      // console.log('after: ',nodenum,' ',edgenum);
+      // console.log("newAdjList: "+newAdjList);
       setAdjList(assert_ne(newAdjList,nodenum-1,edgenum-e_del));
+      // setFormAdjList(assert_ne(newAdjList,nodenum-1,edgenum-e_del));
       setEdgenum(edgenum => edgenum - e_del);
       setNodenum(nodenum => nodenum-1); 
-      setFormAdjList(adjList);
+
+      //**is adjList up  to date?*/
+      // console.log("setting form after node delete to: "+adjList);
     }
   }
 

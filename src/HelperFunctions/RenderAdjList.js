@@ -1,11 +1,11 @@
 import {createNode} from '../components/Graph/Nodes.js'
 // export default function RenderAdjList(value, nodelist,setNodenum,setEdgenum){
-export default function RenderAdjList(value, nodelist){
-  // console.log('in: ',nodelist,'adj: ',value);
+export default function RenderAdjList(adjList, nodelist){
+  console.log('RenderAdjList \tadjList: ',adjList);
     let newnodelist = [];
-    const arr = value.split(/[\n]+/);
+    const arr = adjList.split(/[\n]+/);
     let [n,e] = [0,0];
-    // let n = {num: 0},e=0;
+
 
     for(let i=1;i<arr.length;i++){
       if(typeof arr[i] == 'undefined') continue;
@@ -15,28 +15,21 @@ export default function RenderAdjList(value, nodelist){
       let [u,v] = pair;
       [u,v] = [parseInt(u),parseInt(v)];
       //test whether isnan is a good validation for empty strings and others
-        if(!assert(newnodelist,u,nodelist,n) || !assert(newnodelist,v,nodelist,n)) continue;
+        if(!assert(newnodelist,u,nodelist) || !assert(newnodelist,v,nodelist)) continue;
       e++;
       newnodelist[u].adj.push(v);
       newnodelist[v].adj.push(u);
     }
 
-    // console.log('out: ',nodelist);
-    nodelist.forEach((node,id) => {
-      if(node){
-        if(node.boardClicked && newnodelist[id]==null){
-          newnodelist[id] = nodelist[id];
-          newnodelist[id].adj = [];
-        }
-        // console.log('id: ',id);
-      } 
-    });
+   
     newnodelist.forEach( (node) => {if(node) n++;})
-    console.log('newnodelist: ',newnodelist);
+
+    // console.log('newnodelist: ',newnodelist);
+
     return [newnodelist,n,e];
 }
 
-const assert = (newnodelist, u, nodelist,n) => {
+const assert = (newnodelist, u, nodelist) => {
   if(isNaN(u))
     return false;
   if(u>=newnodelist.length || newnodelist[u]==null){

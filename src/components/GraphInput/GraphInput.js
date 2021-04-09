@@ -7,6 +7,7 @@ import './GraphInput.css'
 
 // const petersen = '10 15 \n0 1 \n0 4 \n0 5 \n1 6 \n1 2 \n2 3 \n2 7 \n3 8 \n3 4 \n4 9 \n5 8 \n5 7 \n6 8 \n6 9 \n7 9'
 
+
 export default function GraphInput({setAdjList, setGraphity, formAdjList, setFormAdjList}){
     // const [value,setValue] = useState(adjList);
     const [active, setActive] = useState(1);
@@ -17,13 +18,15 @@ export default function GraphInput({setAdjList, setGraphity, formAdjList, setFor
     const handlePaginationClick = (e) => {
         console.log(e.target.parentElement);
         setActive(e.target.parentElement.id);
-        setGraphity(e.target.parentElement.id==1)
+        setGraphity(e.target.parentElement.id==1);
         // console.log('set graphity: ',e.target.parentElement.id==1);
         // console.log('active: ',active)
     }
 
     const handleChange = (e) => {
-        // setValue(e.target.value);
+
+        console.log("form value: "+e.target.value);
+
         setFormAdjList(e.target.value);
         setAdjList(e.target.value);
     }
