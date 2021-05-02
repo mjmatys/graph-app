@@ -9,27 +9,29 @@ import './InputPopover.css'
 
 
 export default function InputTooltip(props) {
-    const popover = (
-        <Popover id="popover-basic">
-          <Popover.Title as="h3"><strong>Input Example</strong></Popover.Title>
-          <Popover.Content>
-            4 3 <span className="text-muted"> &ndash; 4 nodes and 3 edges</span><br/>
-            0 1 <span className="text-muted"> &ndash; edge between node 0 and 1</span><br/>
-            1 3 <span className="text-muted"> &ndash; edge between node 1 and 3</span><br/>
-            3 2 <span className="text-muted"> &ndash; edge between node 2 and 3</span><br/>
-            {/* To render your own graph provide graph data as shown:<br/>
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Title as="h3"><strong>Input Example</strong></Popover.Title>
+      <Popover.Content>
+        input only edge and isolated nodes data
+            <br />
+            5 3 <span className="text-muted"> &ndash; 5 nodes and 3 edges</span><br />
+            0 1 <span className="text-muted"> &ndash; edge between node 0 and 1</span><br />
+            1 3 <span className="text-muted"> &ndash; edge between node 1 and 3</span><br />
+            3 2 <span className="text-muted"> &ndash; edge between node 2 and 3</span><br />
+            4 <span className="text-muted"> &ndash; 4 is an isolated node </span><br />
+        {/* To render your own graph provide graph data as shown:<br/>
             Node Count &nbsp;&nbsp;&nbsp;&nbsp;Edge Count<br/>
             &#123;Edge Data
             <br/>.          
             <br/>.          
             <br/>.&#125;     */}
-          </Popover.Content>
-        </Popover>
-      );  
-    return (
-        <OverlayTrigger trigger={[ 'focus','hover']} placement="right" overlay={popover}>
-          <img src={qmark} alt="" className="qmark"/>
-        </OverlayTrigger>
-      );
-  }
-  
+      </Popover.Content>
+    </Popover>
+  );
+  return (
+    <OverlayTrigger trigger={['focus', 'hover']} placement="right" overlay={popover}>
+      <img src={qmark} alt="" className="qmark" />
+    </OverlayTrigger>
+  );
+}
