@@ -235,12 +235,14 @@ export default function Board({ adjList, setAdjList, setFormAdjList, graphityOn,
     return () => clearInterval(intervalID);
   }, [mx, my, graphityOn, nodenum, moveid, isMouseDown]);
 
-  const clear = () => {
+  const clear = (e) => {
+    e.preventDefault();
     setAdjList('');
     setNodelist([]);
   }
 
-  const handleFixall = () => {
+  const handleFixall = (e) => {
+    e.preventDefault();
     if (fixall) {
       let newnodelist = nodelist.slice();
       newnodelist.forEach((node) => {
@@ -252,6 +254,7 @@ export default function Board({ adjList, setAdjList, setFormAdjList, graphityOn,
   }
 
   const handleBoardClick = (e) => {
+    e.preventDefault();
     console.log('clicked at: ', e.clientX, ', ', e.clientY);
     if (isDrawing) {
       setIsDrawing(isDrawing ^ 1);

@@ -16,6 +16,7 @@ export default function GraphInput({ setAdjList, setGraphity, formAdjList, setFo
     useEffect(() => console.log(active), [active])
 
     const handlePaginationClick = (e) => {
+        e.preventDefault();
         console.log(e.target.parentElement);
         setActive(e.target.parentElement.id);
         setGraphity(e.target.parentElement.id == 1);

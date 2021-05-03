@@ -154,6 +154,7 @@ export default function AnimateDfs({ initNodelist, setAnimate, setGraphity }) {
   }
 
   const handleGroupClick = (e) => {
+    e.preventDefault();
     if (!started) {
       console.log('started click');
       let newnodelist = cloneDeep(nodelist);

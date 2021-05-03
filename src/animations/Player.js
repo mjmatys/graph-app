@@ -19,15 +19,18 @@ export default function Player({ playing, setPlaying, setStep, started, setStart
         setAnimDelay(2050 - value);
     }, [value])
 
-    const handleRewind = () => {
+    const handleRewind = (e) => {
+        e.preventDefault();
         setDelay(1);
         setStep(step => step - 1);
     }
-    const handleFforward = () => {
+    const handleFforward = (e) => {
+        e.preventDefault();
         setDelay(1);
         setStep(step => step + 1);
     }
-    const handleCancel = () => {
+    const handleCancel = (e) => {
+        e.preventDefault();
         setAnimate(null);
         setGraphity(1);
         setStarted(0);
@@ -40,7 +43,7 @@ export default function Player({ playing, setPlaying, setStep, started, setStart
                 <li className="playerItem border-right leftside" onClick={handleRewind}>
                     <input type="image" src={rewind} className="noselect" />
                 </li>
-                <li className="playerItem border-right" onClick={() => { if (started) setPlaying(playing => playing ^ 1) }}>
+                <li className="playerItem border-right" onClick={(e) => { e.preventDefault(); if (started) setPlaying(playing => playing ^ 1) }}>
                     <input type="image" className="noselect" src={playing ? pause : play} />
                 </li>
                 <li className="playerItem rightside" onClick={handleFforward}>

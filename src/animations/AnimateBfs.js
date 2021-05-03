@@ -151,6 +151,7 @@ export default function AnimateBfs({ initNodelist, setAnimate, setGraphity }) {
   }, [step, delay, nodelist, wait, history, playing, animDelay])
 
   const handleGroupClick = (e) => {
+    e.preventDefault();
     if (!started) {
       console.log('started click');
       let newnodelist = cloneDeep(nodelist);
