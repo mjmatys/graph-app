@@ -56,7 +56,7 @@ const add_edge = (u, v, adjList) => {
 const remove_edge = (u, v, adjList) => {
   let arr = adjList.split(/[\n]/);
   let [n, e] = arr[0].split(/[ ]+/);
-  for (let i = 1; i <= e; i++) {
+  for (let i = 1; i < arr.length; i++) {
     let pair = arr[i].split(/[ ]+/);
     if (pair[0] === '')
       pair.shift();
@@ -68,14 +68,31 @@ const remove_edge = (u, v, adjList) => {
   }
   arr[0] = n.toString() + ' ' + e.toString();
   return arr.join('\n');
+}
+
+const remove_node = (u, adjList) => {
+  let arr = adjList.split(/[\n]/);
+  let [n, e] = arr[0].split(/[ ]+/);
+  for (let i = 1; i < arr.length; i++) {
+    let pair = arr[i].split(/[ ]+/);
+    if (pair[0] === '')
+      pair.shift();
+    if (u == pair[0]) {
+      arr.splice(i--, 1);
+      n--;
+    }
+  }
+  arr[0] = n.toString() + ' ' + e.toString();
+  return arr.join('\n');
 
 }
+
 //undirected graph assumption
 const find_edge = (u, v, nodelist) => nodelist[u].adj.indexOf(parseInt(v)) != -1
 
 const lock = () => {
 }
-export default function Board({ adjList, setAdjList, graphityOn, setGraphity, animate, setAnimate }) {
+export default function Board({ adjList, setAdjList, setFormAdjList, graphityOn, setGraphity, animate, setAnimate }) {
   const latestnodelist = useRef([]);
 
   const [nodelist, setNodelist] = useState([]);
@@ -115,6 +132,7 @@ export default function Board({ adjList, setAdjList, graphityOn, setGraphity, an
     setNodenum(n);
     setEdgenum(e);
     setAdjList(assert_ne(adjList, nodenum, edgenum));
+    setFormAdjList(assert_ne(adjList, nodenum, edgenum));
     console.log('ref: ', latestnodelist.current)
   }, [adjList, nodenum, edgenum])
 
@@ -251,7 +269,7 @@ export default function Board({ adjList, setAdjList, graphityOn, setGraphity, an
       newlist.push(newnode);
 
     setNodelist(newlist);
-    setAdjList(assert_ne(adjList, nodenum + 1, edgenum));
+    setAdjList(assert_ne(adjList, nodenum + 1, edgenum) + '\n' + nxtId);
     setNodenum(nodenum => nodenum + 1);
   }
 
@@ -316,14 +334,8 @@ export default function Board({ adjList, setAdjList, graphityOn, setGraphity, an
         e_del++;
         newAdjList = remove_edge(idu, v, newAdjList);
         const id = newnodelist[v].adj.indexOf(idu);
-        console.log('id: ', id);
-        newnodelist[v].adj.splice(id, 1);
       });
-      newnodelist[idu] = null;
-
-      console.log('before: ', nodenum, ' ', edgenum);
-      setNodelist(newnodelist);
-      console.log('after: ', nodenum, ' ', edgenum);
+      newAdjList = remove_node(idu, newAdjList);
       setAdjList(assert_ne(newAdjList, nodenum - 1, edgenum - e_del));
       setEdgenum(edgenum => edgenum - e_del);
       setNodenum(nodenum => nodenum - 1);
